@@ -24,7 +24,6 @@ paths:
         in: query
         description: 'Requested page'
         style: form
-        explode: true
         schema:
           type: integer
           format: int32
@@ -32,7 +31,6 @@ paths:
         in: query
         description: 'Number of records per page'
         style: form
-        explode: true
         schema:
           type: integer
           format: int32
@@ -54,7 +52,7 @@ paths:
       tags:
       - SIP trunks
       summary: Create a new SIP trunk
-      description: Use this method to create a new SIP trunk on your account. 
+      description: Use this method to create a new SIP trunk on your account.
       operationId: CreateanewSIPtrunk
       parameters: []
       requestBody:
@@ -372,19 +370,19 @@ paths:
                 - $ref: '#/components/schemas/BuyCountriesCitiesResponse'
                 - example:
                     cities:
-                    - area_code: '113'
+                    - area_code: 113
                       id: 128791
                       name: Buenos Aires
-                    - area_code: '341'
+                    - area_code: 341
                       id: 132655
                       name: Rosario
-                    - area_code: '351'
+                    - area_code: 351
                       id: 132656
                       name: Cordoba
-                    - area_code: '381'
+                    - area_code: 381
                       id: 141803
                       name: Tucuman
-                    - area_code: '387'
+                    - area_code: 387
                       id: 141986
                       name: Salta
         '400':
@@ -456,19 +454,19 @@ paths:
                 - $ref: '#/components/schemas/BuyCountriesCitiesResponse'
                 - example:
                     cities:
-                    - area_code: '113'
+                    - area_code: 113
                       id: 128791
                       name: Buenos Aires
-                    - area_code: '341'
+                    - area_code: 341
                       id: 132655
                       name: Rosario
-                    - area_code: '351'
+                    - area_code: 351
                       id: 132656
                       name: Cordoba
-                    - area_code: '381'
+                    - area_code: 381
                       id: 141803
                       name: Tucuman
-                    - area_code: '387'
+                    - area_code: 387
                       id: 141986
                       name: Salta
         '400':
@@ -555,7 +553,7 @@ paths:
                 - example:
                     dids:
                     - activation_fee: '15.0'
-                      channels: 4
+                      channels: '4'
                       city: Buenos Aires
                       cnam: false
                       country: Argentina
@@ -568,7 +566,7 @@ paths:
                       per_min: '0.01'
                       require_docs: []
                       sms_enabled: false
-                      sms_price: '0.0'
+                      sms_price: 0.0
                     pagination:
                       total: 1
                       total_pages: 1
@@ -598,9 +596,9 @@ paths:
       - Cart
       summary: Add phone numbers to the cart
       description: >-
-        Use this method to add phone numbers (DIDs) to the cart in your account. 
-        After adding numbers, you can finalize the purchase by checking out the cart. 
-  
+        Use this method to add phone numbers (DIDs) to the cart in your account.
+        After adding numbers, you can finalize the purchase by checking out the cart.
+
         The response includes a list of phone numbers that were successfully added.
       operationId: AddDIDnumberstothecart
       parameters: []
@@ -610,12 +608,18 @@ paths:
           application/json:
             schema:
               type: object
+              additionalProperties: false
               required:
               - ids
               properties:
                 ids:
-                  type: string
-                  example: ['541139862174','541139862175']
+                  type: array
+                  description: A list of phone numbers to add to the cart.
+                  items:
+                    type: string
+                  example:
+                    - '541139862174'
+                    - '541139862175'
         required: true
       responses:
         '200':
@@ -624,7 +628,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                type: array
+                additionalProperties: false
                 example:
                 - activation_fee: '15.0'
                   channels: 4
@@ -754,20 +759,21 @@ paths:
       tags:
       - Cart
       summary: Remove numbers from the cart
-      description: Use this method to remove phone numbers from the cart in your account. 
+      description: Use this method to remove phone numbers from the cart in your account.
       operationId: Removenumbersfromthecart
-      parameters:
-      - name: ids
-        in: query
-        description: An array of phone numbers to remove
+      requestBody:
         required: true
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
-            type: string
-          example: ['541139862174', '541139862175']
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: An array of phone numbers to remove
+                  example: [ '541139862174', '541139862175' ]
       responses:
         '200':
           description: ''
@@ -808,19 +814,23 @@ paths:
       operationId: CheckoutDIDnumbers
       parameters: []
       requestBody:
-        description: Array of phone numbersto checkout
+        description: Array of phone numbers to checkout
         content:
           application/json:
             schema:
               type: object
+              additionalProperties: false
               required:
-              - ids
+                - ids
               properties:
                 ids:
                   type: array
+                  description: A list of phone numbers to add to the cart.
                   items:
                     type: string
-                  example: ['541139862174', '541139862175']
+                  example:
+                    - '541139862174'
+                    - '541139862175'
         required: true
       responses:
         '201':
@@ -1018,6 +1028,7 @@ paths:
           application/json:
             schema:
               type: object
+              additionalProperties: false
               properties:
                 call_recording_enabled:
                   type: boolean
@@ -1034,7 +1045,7 @@ paths:
                 sms_relay_url:
                   type: string
                   description: SMS relay URL for the number. Incoming  and MMS messages are sent to this URL as HTTP POST requests. If the number isn't SMS-enabled, setting the `sms_relay_url` returns the `HTTP 422 Unprocessable Content` error.
-                  
+
                     To remove inbound message routing for this number, set the value to `null`. Messages will then be forwarded only to the `sms_relay_url` configured on the account.
                   example: https://you-site.com/sms
                 call_status_url:
@@ -1063,7 +1074,7 @@ paths:
       - My numbers
       summary: SMS-enable a specific number
       description: |-
-        Use this method to enable or disable inbound SMS support on a specific phone number. 
+        Use this method to enable or disable inbound SMS support on a specific phone number.
 
         **Note**: Inbound SMS can only be activated on US and CA numbers.
       operationId: UpdateSMSenabledstatusforaDID
@@ -1072,6 +1083,7 @@ paths:
           application/json:
             schema:
               type: object
+              additionalProperties: false
               required:
               - sms_enabled
               - id
@@ -1140,26 +1152,6 @@ paths:
               allOf:
               - $ref: '#/components/schemas/MydidsUpdateDestinationsRequest'
               - description: Inbound call routing to be configured
-                example:
-                  ids:
-                  - 1
-                  - 2
-                  - 3
-                  destinations:
-                  - destination: 12565378257@acme.com
-                    priority: 2
-                    transport: 1
-                    trunk_id: null
-            example:
-              ids:
-              - 1
-              - 2
-              - 3
-              destinations:
-              - destination: 12565378257@acme.com
-                priority: 2
-                transport: 1
-                trunk_id: null
         required: true
       responses:
         '200':
@@ -1214,6 +1206,7 @@ paths:
               - doc_attachment
               - doc_id
               type: object
+              additionalProperties: false
               properties:
                 did_ids:
                   type: string
@@ -1235,6 +1228,7 @@ paths:
                 type: array
                 items:
                   type: object
+                  additionalProperties: false
                   properties:
                     allow_replace:
                       type: boolean
@@ -1425,19 +1419,19 @@ paths:
                 allOf:
                   - $ref: '#/components/schemas/CDRswithtranscription'
       deprecated: false
-  /cdr/{callid}/retranscribe:
+  /cdr/{cdr_uuid}/retranscribe:
     put:
       tags:
       - CDRs
       summary: Transcribe a single call
       description: >-
-        Use this method to submit a specific call recording for transcription. 
-        
-        
-        The processing time depends on the call length and the number of recordings in the queue.  Most calls are transcribed within 10 minutes. 
+        Use this method to submit a specific call recording for transcription.
+
+
+        The processing time depends on the call length and the number of recordings in the queue.  Most calls are transcribed within 10 minutes.
         To receive a notification when the transcription is completed, provide a webhook address in the `webhook_url` parameter. Wavix will send a status update to this address.
-        
-        
+
+
         The method responses with the `HTTP 200 OK` status code and no content. After the transcription is completed, the service sends a POST callback to the specified webhook:
 
         ```json
@@ -1452,7 +1446,7 @@ paths:
         - status - status of the operation. Can be either `completed` indicating the recorded call was successfully transcribed or `failed` which indicates that there was an error while transcribing the call.
       operationId: Transcribeasinglecall
       parameters:
-      - name: callid
+      - name: cdr_uuid
         in: path
         description: Unique identifier of a call
         required: true
@@ -1472,13 +1466,17 @@ paths:
       responses:
         '200':
           description: Indicates successful request
-          headers: {}
           content:
             application/json:
               schema:
                 type: object
-                example:
-                  success: true
+                additionalProperties: false
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                required:
+                  - success
               example:
                 success: true
         '403':
@@ -1488,23 +1486,23 @@ paths:
         '422':
           $ref: '#/components/responses/ValidationError'
       deprecated: false
-  /cdr/{callid}/transcription:
+  /cdr/{cdr_uuid}/transcription:
     get:
       tags:
       - CDRs
       summary: Request transcription for a specific call
       description: |
-        Use this method to retrieve transcription for a specific recorded call. 
-      
-        The response contains a JSON object with an array of `turn` objects.  
+        Use this method to retrieve transcription for a specific recorded call.
+
+        The response contains a JSON object with an array of `turn` objects.
         Each `turn` contains:
-        - The text spoken by a particular speaker  
-        - The start and end times for that text, calculated from the moment the call was answered  
+        - The text spoken by a particular speaker
+        - The start and end times for that text, calculated from the moment the call was answered
 
         For convenience, the response also provides the full text for each speaker.
       operationId: Requesttranscriptionforaspecificcall
       parameters:
-      - name: callid
+      - name: cdr_uuid
         in: path
         description: Unique identifier of a call
         required: true
@@ -1570,71 +1568,95 @@ paths:
       description: Use this method to retrieve Call Detail Records (CDRs) in Newline-Delimeted JSON (NDJSON) format. Useful for bulk data export.
       operationId: GetallCDRrecordsasNDJSONstream
       parameters:
-      - name: from
-        in: query
-        description: Start date of your search time range, in `yyyy-mm-dd` format
-        style: form
-        explode: true
-        schema:
-          type: string
-          example: 2023-01-01
-      - name: to
-        in: query
-        description: End date of your search time range, in `yyyy-mm-dd` format.
-        style: form
-        explode: true
-        schema:
-          type: string
-          example: 2023-09-01
-      - name: type
-        in: query
-        description: Use `placed` to get CDRs for outbound calls or `received` for inbound calls.
-        style: form
-        explode: true
-        schema:
-          type: string
-          example: received
-      - name: disposition
-        in: query
-        description: Filter results by call disposition. If this parameter is not specified, only answered calls are returned. To retrieve all calls regardless of disposition, set the parameter value to `all`.
-        style: form
-        explode: true
-        schema:
-          allOf:
-          - $ref: '#/components/schemas/Calldisposition'
-          - description: Filter results by call disposition. If this parameter is not specified, only answered calls are returned. To retrieve all calls regardless of disposition, set the parameter value to `all`.
-      - name: from_search
-        in: query
-        description: Filter results by the originating phone number. The parameter can be either full phone number or a part of it.
-        style: form
-        explode: true
-        schema:
-          type: string
-          example: '13524815863'
-      - name: to_search
-        in: query
-        description: Filter results by destination phone number. The parameter can be either full phone number or a part of it.
-        style: form
-        explode: true
-        schema:
-          type: string
-          example: '12565378257'
-      - name: sip_trunk
-        in: query
-        description: Filter results by the unique SIP trunk login used to place outbound calls. For inbound calls, the parameter is ignored.
-        style: form
-        explode: true
-        schema:
-          type: string
-          example: '12321'
-      - name: uuid
-        in: query
-        description: Filter results by the unique identified of a call
-        style: form
-        explode: true
-        schema:
-          type: string
-          example: 99df5ffd-962a-410f-bcce-d08f1f7f328c
+        - name: from
+          in: query
+          description: Start date of your search time range, in `yyyy-mm-dd` format
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+            format: date
+            example: 2023-01-01
+        - name: to
+          in: query
+          description: End date of your search time range, in `yyyy-mm-dd` format.
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+            format: date
+            example: 2023-09-01
+        - name: type
+          in: query
+          description: Use `placed` to get CDRs for outbound calls or `received` for inbound calls.
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: received
+        - name: disposition
+          in: query
+          description: Filter calls by disposition. In case the parameter is not specified, only answered calls are returned. To get all calls regardless their disposition pass `all` as the parameter value
+          style: form
+          explode: true
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Calldisposition'
+              - description: Filter calls by disposition. In case the parameter is not specified, only answered calls are returned. To get all calls regardless their disposition pass `all` as the parameter value
+        - name: from_search
+          in: query
+          description: Filter results by the originating phone number. The parameter can be either full phone number or a part of it.
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: '13524815863'
+        - name: to_search
+          in: query
+          description: Filter results by destination phone number. The parameter can be either full phone number or a part of it.
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: '12565378257'
+        - name: sip_trunk
+          in: query
+          description: Filter results by the unique SIP trunk login used to place an outbound call. For inbound calls, this parameter is ignored.
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: '12321'
+        - name: uuid
+          in: query
+          description: Filter results by Call ID
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: 99df5ffd-962a-410f-bcce-d08f1f7f328c
+        - name: page
+          in: query
+          description: Requested page
+          style: form
+          explode: true
+          schema:
+            type: integer
+            format: int32
+            example: 1
+        - name: per_page
+          in: query
+          description: Number of records per page
+          style: form
+          explode: true
+          schema:
+            type: integer
+            format: int32
+            default: 25
+            example: 25
       responses:
         '200':
           description: Streaming NDJSON response with CDR records.
@@ -1657,36 +1679,11 @@ paths:
           content:
             application/x-ndjson:
               schema:
-                type: object
-                description: ''
-                properties:
-                  date:
-                    type: string
-                  from:
-                    type: string
-                  to:
-                    type: string
-                  disposition:
-                    type: string
-                  duration:
-                    type: string
-                  destination:
-                    type: string
-                  per_minute:
-                    type: string
-                  charge:
-                    type: string
-                  sip_trunk:
-                    type: string
-                  forward_fee:
-                    type: string
-                  uuid:
-                    type: string
-              examples:
-                  sample:
-                    value: |-
-                      {"charge":"0.0059","date":"2023-08-28T15:43:31.000Z","destination":"My trunk","disposition":"answered","duration":26,"forward_fee":"0.0","from":"13524815863","per_minute":"0.0059","to":"12565378257","uuid":"99df5ffd-962a-410f-bcce-d08f1f7f328c"}
-                      {"charge":"0.00325","date":"2023-11-29T14:48:50.000Z","destination":"United States","disposition":"answered","duration":21,"from":"17182444444","per_minute":"0.0065","to":"18007009909","uuid":"aa566501-c591-4a8b-b3b9-cc1295398b72","forward_fee":"0.003"}
+                type: string
+                description: NDJSON stream of CDR records, one JSON object per line
+              example: |-
+                {"charge":"0.0059","date":"2023-08-28T15:43:31.000Z","destination":"My trunk","disposition":"answered","duration":26,"forward_fee":"0.0","from":"13524815863","per_minute":"0.0059","to":"12565378257","uuid":"99df5ffd-962a-410f-bcce-d08f1f7f328c"}
+                {"charge":"0.00325","date":"2023-11-29T14:48:50.000Z","destination":"United States","disposition":"answered","duration":21,"from":"17182444444","per_minute":"0.0065","to":"18007009909","uuid":"aa566501-c591-4a8b-b3b9-cc1295398b72","forward_fee":"0.003"}
         '403':
           $ref: '#/components/responses/ForbiddenError'
       deprecated: false
@@ -1756,6 +1753,17 @@ paths:
           items:
             type: string
           example: ['123', '456']
+      - name: dids
+        in: query
+        description: Filter results by DIDs
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+          example: [ '12344213' ]
       responses:
         '200':
           description: A list of recorded calls matching the filter criteria.
@@ -1764,13 +1772,14 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   recordings:
                     type: array
                     items:
                       $ref: '#/components/schemas/CallRecordingResponse'
                   invalid:
-                    type: array
+                    type: object
                     items:
                       $ref: '#/components/schemas/InvalidRecordingResponse'
                   pagination:
@@ -1780,7 +1789,7 @@ paths:
         '403':
           $ref: '#/components/responses/ForbiddenError'
       deprecated: false
-  /recordings/{id}:
+  /recordings/{cdr_uuid}:
     get:
       tags:
       - Call recording
@@ -1798,7 +1807,7 @@ paths:
           type: string
           example: 'aa566501-c591-4a8b-b3b9-cc1295398b72'
       responses:
-        '302':
+        '200':
           description: Redirects to the recording file URL.
           headers:
             Location:
@@ -1828,27 +1837,28 @@ paths:
         '404':
           $ref: '#/components/responses/NotFoundError'
       deprecated: false
+  /recordings/{id}:
     delete:
       tags:
-      - Call recording
+        - Call recording
       summary: Delete a specific recording
       description: Use this method to delete a specific recording.
       operationId: Deletecallrecording
       parameters:
-      - name: id
-        in: path
-        description: Call recording ID
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int32
-          example: 123
+        - name: id
+          in: path
+          description: Call recording ID
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int32
+            example: 123
       responses:
         '200':
           description: The recording was deleted successfully.
-          headers: {}
+          headers: { }
           content:
             application/json:
               schema:
@@ -1861,7 +1871,7 @@ paths:
                 success: true
         '400':
           description: Recording was previously deleted.
-          headers: {}
+          headers: { }
           content:
             application/json:
               schema:
@@ -1889,7 +1899,7 @@ paths:
       description: |
         Use this method to upload a file and submit it for transcription. When the transcription is completed, Wavix sends a POST callback to the webhook specified in the request.
 
-         Callback example:  
+         Callback example:
            ```json
            {
                 "request_id": "e865ea07-25af-4fdd-876e-04b0d41d5ebd",
@@ -1911,6 +1921,7 @@ paths:
               - file
               - callback_url
               type: object
+              additionalProperties: false
               properties:
                 file:
                   type: string
@@ -2083,6 +2094,7 @@ paths:
           application/json:
             schema:
               type: object
+              additionalProperties: false
               required:
               - callback_url
               properties:
@@ -2166,14 +2178,21 @@ paths:
           type: string
           example: e865ea07-25af-4fdd-876e-04b0d41d5ebd
       responses:
-        '302':
-          description: Original file URL
-          headers:
-            Location:
-              description: URL to the file
+        '200':
+          description: ''
+          content:
+            audio/wav:
               schema:
                 type: string
-                example: https://api.wavix.com/v1/files/e865ea07-25af-4fdd-876e-04b0d41d5eb 
+                format: binary
+            audio/mpeg:
+              schema:
+                type: string
+                format: binary
+            audio/mp4:
+              schema:
+                type: string
+                format: binary
         '404':
           description: "Record not found"
           content:
@@ -2193,12 +2212,12 @@ paths:
       tags:
       - Call webhooks
       summary: List configured webhooks
-      description: |- 
+      description: |-
         Use this method to retrieve a list of configured call webhooks.
 
         Wavix sends POST callbacks to your webhook URL for on-call and post-call events.
         - The `on-call` callback includes real-time call status updates. It's triggered when a call is initiated, answered, and ends.
-        - The `post-call` callback includes details such as call disposition, duration, and cost. It's triggered after the call ends. 
+        - The `post-call` callback includes details such as call disposition, duration, and cost. It's triggered after the call ends.
       operationId: Getcallwebhooks
       parameters: []
       responses:
@@ -2235,7 +2254,7 @@ paths:
 
         Wavix sends POST callbacks to your webhook URL for on-call and post-call events.
         - Use `on-call` webhook to receive real-time call status updates. It's triggered when a call is initiated, answered, and ends.
-        - The `post-call` webhook is triggered after the call ends. The callback includes details such as call disposition, duration, and cost.      
+        - The `post-call` webhook is triggered after the call ends. The callback includes details such as call disposition, duration, and cost.
       operationId: Createcallwebhook
       parameters: []
       requestBody:
@@ -2244,6 +2263,7 @@ paths:
           application/json:
             schema:
               type: object
+              additionalProperties: false
               required:
               - url
               - event_type
@@ -2273,6 +2293,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CallWebhookResponse'
               example:
+                success: true
                 event_type: 'post-call'
                 url: 'https://you-site.com/webhook'
         '400':
@@ -2538,9 +2559,9 @@ paths:
       - Call control
       summary: Answer an inbound call
       description: |-
-        Use this method to programmatically answer an inbound call. Make sure you've configured the inbound call webhook on a number using [API](/api-reference/my-numbers/update-a-specific-number) or GUI. If configured, Wavix posts call status updates to the webhook associated with the number. 
-        
-        Optionally, you can immediately start call media streaming when the inbound call is answered. To start streaming, paste the following JSON in the request body. Wavix will start media streaming to a WebSocket URL specified in the request. 
+        Use this method to programmatically answer an inbound call. Make sure you've configured the inbound call webhook on a number using [API](/api-reference/my-numbers/update-a-specific-number) or GUI. If configured, Wavix posts call status updates to the webhook associated with the number.
+
+        Optionally, you can immediately start call media streaming when the inbound call is answered. To start streaming, paste the following JSON in the request body. Wavix will start media streaming to a WebSocket URL specified in the request.
         ```json
         {
           "stream_channel": "inbound",
@@ -2587,7 +2608,19 @@ paths:
                     example: false
                   message:
                     type: string
-                    example: Invalid JSON format
+                    example: Validation error
+                  errors:
+                    type: object
+                    properties:
+                      stream_url:
+                        type: string
+                        example: "Stream URL must be a valid WebSocket URL (ws:// or wss://)"
+                      stream_type:
+                        type: string
+                        example: "Stream type must be 'oneway' or 'twoway'"
+                      stream_channel:
+                        type: string
+                        example: "Stream channel must be 'inbound', 'outbound', or 'both'"
         '401':
           description: Access denied
           content:
@@ -2666,6 +2699,12 @@ paths:
                       stream_url:
                         type: string
                         example: "Stream URL must be a valid WebSocket URL (ws:// or wss://)"
+                      stream_type:
+                        type: string
+                        example: "Stream type must be 'oneway' or 'twoway'"
+                      stream_channel:
+                        type: string
+                        example: "Stream channel must be 'inbound', 'outbound', or 'both'"
         '401':
           description: Access denied
           content:
@@ -2685,7 +2724,7 @@ paths:
       tags:
       - Call control
       summary: Stop call streaming
-      description: Use this method to stop call media streaming. 
+      description: Use this method to stop call media streaming.
       operationId: DeleteCallStream
       parameters:
       - name: uuid
@@ -2704,7 +2743,7 @@ paths:
           format: uuid
       responses:
         '200':
-          description: Stream successfully stopped. 
+          description: Stream successfully stopped.
           content:
             application/json:
               schema:
@@ -3010,7 +3049,7 @@ paths:
       tags:
         - Wavix Embeddable
       summary: Get active widget tokens
-      description: Use this method to list all active Wavix Embeddable widget tokens on your account. By default, results are paginated with 25 items per page. 
+      description: Use this method to list all active Wavix Embeddable widget tokens on your account. By default, results are paginated with 25 items per page.
       operationId: GetActiveWidgetTokens
       parameters: [ ]
       responses:
@@ -3145,7 +3184,7 @@ paths:
         required: true
       responses:
         '200':
-          description: The widget token payload successfully updated 
+          description: The widget token payload successfully updated
           content:
             application/json:
               schema:
@@ -3303,9 +3342,9 @@ paths:
       - SMS and MMS
       summary: Create a new Sender ID
       description: Use this method to create a new Sender ID.\After you create the sender ID, wait for it to be allowlisted for the destination countries. To check the status, use the [Get a sender ID](https://wavix.com) method.
-      
 
-        **Important** To create Sender IDs in the US, use the 10DLC API. 
+
+        **Important** To create Sender IDs in the US, use the 10DLC API.
       operationId: ProvisionanewSenderID
       parameters: []
       requestBody:
@@ -3380,9 +3419,9 @@ paths:
       - SMS and MMS
       summary: Delete a Sender ID
       description: Use this method to delete a Sender ID.
-      
 
-        **Important** Use carefully. Deleting a Sender ID is irreversible. Any attempts to send messages carrying the deleted Sender ID will fail. 
+
+        **Important** Use carefully. Deleting a Sender ID is irreversible. Any attempts to send messages carrying the deleted Sender ID will fail.
       operationId: DeleteaSenderID
       parameters:
       - name: id
@@ -3437,10 +3476,10 @@ paths:
       tags:
       - SMS and MMS
       summary: Unsubscribe a phone number from SMS messages
-      description: "Use this method to opt out a phone number from receiving SMS and MMS messages. 
-      
+      description: "Use this method to opt out a phone number from receiving SMS and MMS messages.
 
-          You can either:\n 
+
+          You can either:\n
           - Opt out a phone number for a specific Sender ID.\n
           - Block all outbound messages sent to the phone number."
       operationId: Opt-outaphonenumberofSMSmessages
@@ -3531,6 +3570,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   carrier_fees:
                     type: string
@@ -3563,6 +3603,7 @@ paths:
                     example: "260"
                   message_body:
                     type: object
+                    additionalProperties: false
                     properties:
                       text:
                         type: string
@@ -3573,7 +3614,7 @@ paths:
                         items:
                           type: string
                           format: uri
-                          example: "https://api.example.com/v3/messages/attachments/abc123/file1.mp3"
+                          example: "https://api.examples.com/v3/messages/attachments/abc123/file1.mp3"
                   message_id:
                     type: string
                     description: Unique identifier of the message
@@ -3619,9 +3660,9 @@ paths:
                 message_body:
                   text: "This is a test MMS message with multiple media attachments."
                   media:
-                    - "https://api.example.com/v3/messages/attachments/abc123/file1.mp3"
-                    - "https://api.example.com/v3/messages/attachments/abc123/file2.mp3"
-                    - "https://api.example.com/v3/messages/attachments/abc123/file3.mp3"
+                    - "https://api.examples.com/v3/messages/attachments/abc123/file1.mp3"
+                    - "https://api.examples.com/v3/messages/attachments/abc123/file2.mp3"
+                    - "https://api.examples.com/v3/messages/attachments/abc123/file3.mp3"
                 message_id: "abc123de-4567-890f-gh12-ijklmnop3456"
                 message_type: "mms"
                 segments: 1
@@ -4307,8 +4348,8 @@ paths:
       tags:
       - 10DLC
       summary: Update a 10DLC Brand
-      description: "Use this method to update the details of a registered 10DLC Brand. 
-      
+      description: "Use this method to update the details of a registered 10DLC Brand.
+
       Please note that Brands in the 'REVIEW' status cannot be updated.\n\n**Important.** Updating any of the following parameters — `company_name`, `ein_taxid`, `ein_taxid_country`, or `entity_type` — will reset the Brand status to 'UNVERIFIED,' and the Brand will be automatically re-submitted for verification. These parameters cannot be updated for Brands with a 'VETTED_VERIFIED' identity status or Brands with active Campaigns."
       operationId: Updatea10DLCBrand
       parameters:
@@ -4662,6 +4703,7 @@ paths:
               required:
               - file
               type: object
+              additionalProperties: false
               properties:
                 file:
                   type: string
@@ -6721,8 +6763,14 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
+                anyOf:
                 - $ref: '#/components/schemas/Validatemultiplenumbersresponse'
+                - type: object
+                  properties:
+                    request_uuid:
+                      type: string
+                      description: Request UUID
+                      example: 15323ba4-80c1-41be-b8e7-07bb435c7445
         '400':
           $ref: '#/components/responses/BadRequestError'
         '403':
@@ -6834,9 +6882,11 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   voice_campaign:
                     type: object
+                    additionalProperties: false
                     properties:
                       id:
                         type: integer
@@ -6903,9 +6953,11 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   voice_campaign:
                     type: object
+                    additionalProperties: false
                     properties:
                       id:
                         type: integer
@@ -7083,7 +7135,7 @@ paths:
                 allOf:
                 - $ref: '#/components/schemas/Create2FAVerificationResponse'
                 - example:
-                    succes: true
+                    success: true
                     service_id: 7204a030201211ee9fb47d093f2f127c
                     session_url: https://api.wavix.com/v1/two-fa/verification/2953d4308f2e11ecb75fcdafd6d2d687
                     session_id: 2953d4308f2e11ecb75fcdafd6d2d687
@@ -7166,7 +7218,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                type: array
+                additionalProperties: false
                 example:
                 - created_at: 2022-02-16T13:41:38.000Z
                   session_id: 2953d4308f2e11ecb75fcdafd6d2d687
@@ -7682,7 +7735,7 @@ paths:
           description: ''
           headers: {}
           content:
-            application/octet-stream:
+            application/pdf:
               schema:
                 type: string
                 format: binary
@@ -7772,7 +7825,7 @@ paths:
       tags:
       - Sub-accounts
       summary: Get sub-accounts
-      description: Use this method to retrieve a list of your sub-accounts. 
+      description: Use this method to retrieve a list of your sub-accounts.
       operationId: Getusers
       parameters:
       - name: status
@@ -7793,6 +7846,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   sub_organizations:
                     type: array
@@ -7818,6 +7872,7 @@ paths:
           application/json:
             schema:
               type: object
+              additionalProperties: false
               required:
               - name
               properties:
@@ -7828,23 +7883,24 @@ paths:
                   example: 'Test Company'
                 default_destinations:
                   type: object
+                  additionalProperties: false
                   description: Default webhook URLs for inbound messages and delivery reports
                   properties:
                     sms_endpoint:
                       type: string
                       format: uri
                       description: Inbound messages webhook URL
-                      example: 'https://example.com/sms'
+                      example: 'https://examples.com/sms'
                     dlr_endpoint:
                       type: string
                       format: uri
                       description: Delivery report webhook URL
-                      example: 'https://example.com/dlr'
+                      example: 'https://examples.com/dlr'
               example:
                 name: 'Test Company'
                 default_destinations:
-                  sms_endpoint: 'https://example.com/sms'
-                  dlr_endpoint: 'https://example.com/dlr'
+                  sms_endpoint: 'https://examples.com/sms'
+                  dlr_endpoint: 'https://examples.com/dlr'
         required: true
       responses:
         '200':
@@ -7936,6 +7992,7 @@ paths:
           application/json:
             schema:
               type: object
+              additionalProperties: false
               required:
               - name
               properties:
@@ -7951,24 +8008,25 @@ paths:
                   example: 'enabled'
                 default_destinations:
                   type: object
+                  additionalProperties: false
                   description: Default webhook URLs for inbound messages and delivery reports
                   properties:
                     sms_endpoint:
                       type: string
                       format: uri
                       description: Inbound messages webhook URL
-                      example: 'https://example.com/sms'
+                      example: 'https://examples.com/sms'
                     dlr_endpoint:
                       type: string
                       format: uri
                       description: Delivery report webhook URL
-                      example: 'https://example.com/dlr'
+                      example: 'https://examples.com/dlr'
               example:
                 name: 'Updated Company Name'
                 status: 'enabled'
                 default_destinations:
-                  sms_endpoint: 'https://example.com/sms'
-                  dlr_endpoint: 'https://example.com/dlr'
+                  sms_endpoint: 'https://examples.com/sms'
+                  dlr_endpoint: 'https://examples.com/dlr'
         required: true
       responses:
         '200':
@@ -8060,19 +8118,23 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   transactions:
                     type: array
                     description: A list of transactions for the specified sub-account
                     items:
                       type: object
+                      additionalProperties: false
                       properties:
                         amount:
-                          type: string
+                          type: number
+                          format: float
                           description: Transaction amount
                           example: "10.50"
                         balance_after:
-                          type: string
+                          type: number
+                          format: float
                           description: Sub-account's balance after the transaction is applied
                           example: "100.00"
                         date:
@@ -8094,6 +8156,7 @@ paths:
                           example: 1
                   pagination:
                     type: object
+                    additionalProperties: false
                     description: Pagination details
                     properties:
                       current_page:
@@ -8135,7 +8198,7 @@ webhooks:
       description: The `on-call` callback includes real-time call status updates. It's triggered when a call is initiated, answered, and ends.
       tags:
       - Call webhooks
-      requestBody:        
+      requestBody:
         content:
           application/json:
             schema:
@@ -8145,7 +8208,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was successfully received
   Post-call-event:
     post:
-      description: The `post-call` callback includes details such as call disposition, duration, and cost. It's triggered after the call ends. 
+      description: The `post-call` callback includes details such as call disposition, duration, and cost. It's triggered after the call ends.
       tags:
       - Call webhooks
       requestBody:
@@ -8229,9 +8292,9 @@ webhooks:
   Number-status-changed:
     post:
       description: |-
-        The webhook is triggered when the status of a phone number is updated. 
-        
-        - If the status changes to `APPROVED`, Wavix automatically creates a Sender ID for the number. 
+        The webhook is triggered when the status of a phone number is updated.
+
+        - If the status changes to `APPROVED`, Wavix automatically creates a Sender ID for the number.
         - If the status changes to `REJECTED`, Wavix blocks the associated Sender ID.
       tags:
       - 10DLC
@@ -8253,6 +8316,7 @@ components:
       - name
       - area_code
       type: object
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -8264,7 +8328,7 @@ components:
           description: Name of the city
           example: Paris
         area_code:
-          type: string
+          type: number
           description: Rate center
     FinancialTransaction:
       title: FinancialTransaction
@@ -8278,6 +8342,7 @@ components:
       - type
       - show_invoice
       type: object
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -8290,13 +8355,15 @@ components:
           format: date-time
           example: 2023-08-29T14:48:38.000Z
         amount:
-          type: string
+          type: number
+          format: float
           description: Transaction amount. Negative transaction amount indicates balance reduction.
-          example: '-0.99'
+          example: -0.99
         balance_after:
-          type: string
+          type: number
+          format: float
           description: The account balance after the transaction is created
-          example: '309.0601'
+          example: 309.0601
         details:
           type: string
           description: Detailed description of the transaction
@@ -8326,6 +8393,7 @@ components:
       - name
       - has_provinces_or_states
       type: object
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -8359,6 +8427,7 @@ components:
       - delivered_at
       - error_message
       type: object
+      additionalProperties: false
       properties:
         message_id:
           type: string
@@ -8459,6 +8528,7 @@ components:
       - message_body
       - received_at
       type: object
+      additionalProperties: false
       properties:
         message_id:
           type: string
@@ -8491,6 +8561,7 @@ components:
       - name
       - title
       type: object
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -8511,6 +8582,7 @@ components:
       required:
       - number
       type: object
+      additionalProperties: false
       properties:
         number:
           type: string
@@ -8538,6 +8610,7 @@ components:
       - transcription_enabled
       - transcription_threshold
       type: object
+      additionalProperties: false
       properties:
         label:
           type: string
@@ -8549,6 +8622,7 @@ components:
           example: 4r=h;EaCB85QNtr2
         host_request:
           type: object
+          additionalProperties: false
           required:
           - host
           properties:
@@ -8571,6 +8645,7 @@ components:
           type: array
           items:
             type: object
+            additionalProperties: false
             required:
             - ip
             properties:
@@ -8592,6 +8667,11 @@ components:
           description: A maximum call duration for the SIP trunk, in seconds. Must not exceed the maximum duration set for your account. Ignored when call_restrict is `false`.
           format: int32
           example: 3600
+        cost_limit:
+          type: boolean
+          description: Indicates if the max cost limit for an outbound call limit is activated for the SIP trunk.
+          default: false
+          example: true
         max_call_cost:
           type: number
           format: decimal
@@ -8633,6 +8713,9 @@ components:
         machine_detection_enabled:
           type: boolean
           description: "Indicates whether automatic voicemail detection is enabled on the SIP trunk.\nAvailable for `Flex Pro` customers only."
+          example: true
+        encrypted_media:
+          type: boolean
           example: true
     ValidationErrorResponse:
       title: ValidationErrorResponse
@@ -8716,6 +8799,7 @@ components:
       - sms_enabled
       - sms_price
       type: object
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -8735,10 +8819,10 @@ components:
           description: Price per inbound minute
           example: '0.01'
         channels:
-          type: integer
+          type: string
           description: Number of inbound channels
           format: int32
-          example: 4
+          example: '4'
         city:
           type: string
           description: A city of a phone number
@@ -8753,6 +8837,7 @@ components:
           example: AR
         cnam:
           type: boolean
+          nullable: true
           description: Indicates if CNAM can be activated on the phone number
           example: false
         free_min:
@@ -8778,9 +8863,13 @@ components:
           description: Indicates in the phone number can receive inbound SMS and MMS messages
           example: false
         sms_price:
-          type: string
+          type: number
+          format: float
           description: Price per inbound SMS segment
-          example: '0.0'
+          example: 0.25
+        domestic_cli:
+          type: boolean
+          example: true
       description: A phone number available for purchase
     Transactiontype:
       title: Transactiontype
@@ -8833,29 +8922,50 @@ components:
       type: integer
       description: |-
         Transaction type:
-          * 0  -  Payment adjustment
-          * 2  -  DID activation fee
-          * 3  -  DID monthly fees
-          * 6  -  DID forwarding
-          * 11  -  PSTN forwarding fee
-          * 14  -  Outbound call
-          * 15  -  Outbound SMS
-          * 19  -  Credit card payment
-          * 20  -  Payment fee
-          * 23  -  Porting fee
-          * 24  -  Inbound SMS
-          * 25  -  Admin payment
-          * 26  -  Subscription payment
-          * 29  -  Number validator
-          * 30  -  Call recording
-          * 31  -  Storage charge
-          * 32  -  Campaign builder
-          * 33  -  Voicemail detection
-          * 34  -  Sender ID registration
-          * 35  -  Sender ID monthly fee
-          * 36  -  2FA
-          * 41  -  Call transcription
-  
+          * 0   - Payment adjustment
+          * 2   - DID activation fee
+          * 3   - DID monthly fees
+          * 6   - DID forwarding
+          * 11  - PSTN forwarding fee
+          * 14  - Outbound call
+          * 15  - Outbound SMS
+          * 19  - Credit card payment
+          * 20  - Payment fee
+          * 23  - Porting fee
+          * 24  - Inbound SMS
+          * 25  - Admin payment
+          * 26  - Subscription payment
+          * 29  - Number validator
+          * 30  - Call recording
+          * 31  - Storage charge
+          * 32  - Campaign builder
+          * 33  - Voicemail detection
+          * 34  - Sender ID registration
+          * 35  - Sender ID monthly fee
+          * 36  - 2FA
+          * 37  - IVR
+          * 38  - E911 activation
+          * 39  - Outbound MMS
+          * 40  - Inbound MMS
+          * 41  - Call transcription
+          * 42  - 10DLC Brand registration
+          * 43  - 10DLC Campaign registration
+          * 44  - DID order
+          * 45  - Adjustment in
+          * 46  - URL shortener
+          * 47  - 10DLC Brand update
+          * 48  - 10DLC Brand appeal
+          * 49  - Audio transcription
+          * 50  - 10DLC Brand vetting
+          * 51  - 10DLC Brand vetting appeal
+          * 52  - Outbound SMS carrier fee
+          * 53  - Inbound SMS carrier fee
+          * 54  - Outbound MMS carrier fee
+          * 55  - Inbound MMS carrier fee
+          * 57  - Outbound SMS segment
+          * 58  - Inbound SMS segment
+          * 59  - Outbound MMS segment
+          * 60  - Inbound MMS segment
 
     InboundCallDestination:
       title: InboundCallDestination
@@ -8867,6 +8977,7 @@ components:
       - trunk_id
       - trunk_label
       type: object
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -8927,6 +9038,7 @@ components:
       - transcription_threshold
       - domestic_cli
       type: object
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -8995,6 +9107,7 @@ components:
           type: boolean
         label:
           type: string
+          nullable: true
           description: Label assigned to the phone number
         status:
           type: string
@@ -9023,6 +9136,7 @@ components:
           example: https://your-website.com/webhook
         cnam:
           type: boolean
+          nullable: true
           description: Indicates if CNAM storage is activated for the phone number
           example: true
         call_recording_enabled:
@@ -9038,6 +9152,11 @@ components:
           description: The minimal inbound call duration to automatically generate transcription for, in seconds. For `Flex Pro` accounts only.
           format: int32
           example: 6
+        call_status_url:
+          type: string
+          nullable: true
+          description: Call status url
+          example: 'https://example.com'
       description: A phone number on the account
     SenderIDtype:
       title: SenderIDtype
@@ -9054,6 +9173,7 @@ components:
       - type
       - allowlisted_in
       type: object
+      additionalProperties: false
       properties:
         id:
           type: string
@@ -9105,6 +9225,7 @@ components:
       - charge
       - uuid
       type: object
+      additionalProperties: false
       properties:
         date:
           type: string
@@ -9150,8 +9271,14 @@ components:
           type: string
           description: Call ID
           example: 99df5ffd-962a-410f-bcce-d08f1f7f328c
+        parent_uuid:
+          type: string
+          description: Parent UUID
+          nullable: true
+          example: 99df5ffd-962a-410f-bcce-d08f1f7f328c
         answered_by:
           type: string
+          nullable: true
           description: Answered by
           example: 'human'
       description: A CDR of a single call
@@ -9170,6 +9297,7 @@ components:
       - priority
       - transport
       type: object
+      additionalProperties: false
       properties:
         destination:
           type: string
@@ -9206,6 +9334,7 @@ components:
       - status
       - url
       type: object
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -9255,6 +9384,7 @@ components:
       - total
       - total_pages
       type: object
+      additionalProperties: false
       properties:
         current_page:
           type: integer
@@ -9279,10 +9409,10 @@ components:
     Transactionstatus:
       title: Transactionstatus
       enum:
-      - created
-      - pending
-      - committed
-      - rejected
+      - Created
+      - Pending
+      - Committed
+      - Reverted
       type: string
       description: Status of a transaction on the account
     SIPTrunkShort:
@@ -9299,6 +9429,7 @@ components:
       - talk_time
       - charge
       type: object
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -9317,6 +9448,10 @@ components:
           type: string
           description: User-defined name of the SIP trunk
           example: My trunk
+        access_token:
+          type: string
+          nullable: true
+          example: 'twqesadrqw312'
         auth_method:
           description: SIP trunk authentication method. Can be either `Digest` or `IP auth`.
           type: string
@@ -9335,7 +9470,7 @@ components:
         status:
           type: string
           description: "Indicates the status of the SIP trunk. The value can be one of \n`active` - The SIP trunk is active and can be used to place outbound calls.\n`pending` - The IP authentication request is under review by the Wavix team.\n`rejected` - The IP authentication request was rejected by the Wavix team.\nSIP trunks with a pending or rejected status can't be used to place outbound calls."
-        talk_time:  
+        talk_time:
           description: Total duration of all outbound calls placed via the SIP trunk in the current month, in seconds.
           type: integer
           format: int32
@@ -9345,7 +9480,7 @@ components:
           type: string
           example: '24.637'
         call_recording_enabled:
-          description: Indicates if outbound call recording is enabled on the SIP trunk. 
+          description: Indicates if outbound call recording is enabled on the SIP trunk.
           type: boolean
           default: false
         machine_detection_enabled:
@@ -9361,6 +9496,10 @@ components:
           type: integer
           format: int32
           default: 6
+        encrypted_media:
+          type: boolean
+          description: Encrypted media
+          example: true
       description: A SIP trunk on your account
       example:
         id: 3107
@@ -9390,26 +9529,30 @@ components:
       description: Call disposition
     AllowedIPs:
       title: AllowedIPs
-      required:
-      - id
-      - ip
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Unique identifier of the IP address in the list
-          format: int32
-          example: 6712
-        ip:
-          type: string
-          description: Public static IP address
-          example: 127.0.0.1
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required:
+          - id
+          - ip
+        properties:
+          id:
+            type: integer
+            description: Unique identifier of the IP address in the list
+            format: int32
+            example: 6712
+          ip:
+            type: string
+            description: Public static IP address
+            example: 127.0.0.1
     Region:
       title: Region
       required:
       - id
       - name
       type: object
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -9429,6 +9572,7 @@ components:
       - from_date
       - to_date
       type: object
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -9457,8 +9601,8 @@ components:
       - 2
       - 3
       type: integer
-      description: |- 
-        Specifies the type of document required to activate the phone number. 
+      description: |-
+        Specifies the type of document required to activate the phone number.
         Possible values are: `1` - Proof of identity, `2` - Proof of address, `3` - Proof of business registration.
     SIPtrunklist:
       title: SIPtrunklist
@@ -9466,6 +9610,7 @@ components:
       - sip_trunks
       - pagination
       type: object
+      additionalProperties: false
       properties:
         sip_trunks:
           type: array
@@ -9486,6 +9631,8 @@ components:
                 host: 127.0.0.1,
                 status: pending
           }
+          access_token: '3213rasjwqep3uuasdh'
+          encrypted_media: false
           passthrough: false,
           multiple_numbers: true
           status: pending
@@ -9514,9 +9661,11 @@ components:
       - uuid
       - transcription
       type: object
+      additionalProperties: false
       properties:
         answered_by:
           type: string
+          nullable: true
           description: Answered by
           example: 'human'
         date:
@@ -9562,12 +9711,13 @@ components:
           type: string
           description: Call ID
           example: 99df5ffd-962a-410f-bcce-d08f1f7f328c
+        parent_uuid:
+          type: string
+          nullable: true
+          description: Parent UUID
+          example: 99df5ffd-962a-410f-bcce-d08f1f7f328c
         transcription:
           $ref: '#/components/schemas/Transcription1'
-        prices_url:
-          type: string
-          description: Prices url
-          example: 'https://example.com'
       description: A CDR of a single call with call transcription
     MessagesAsyncRequest:
       title: MessagesAsyncRequest
@@ -9576,6 +9726,7 @@ components:
       - to
       - message_body
       type: object
+      additionalProperties: false
       properties:
         from:
           type: string
@@ -9607,33 +9758,35 @@ components:
       - destinations
       - sms_relay_url
       type: object
+      additionalProperties: false
       properties:
         ids:
           type: array
           items:
             type: integer
             format: int32
-          description: An array of unique identifies of DIDs to update
+          description: An array of unique identifiers of DIDs to update
           example:
-          - 1
-          - 2
-          - 3
+            - 1
+            - 2
+            - 3
         destinations:
           type: array
           items:
             $ref: '#/components/schemas/DIDdestination'
           description: An array of inbound call destinations to be set up on the phone number
-          example:
-          - destination: 12565378257@acme.com
-            priority: 2
-            transport: 1
-            trunk_id: null
+        sms_relay_url:
+          type: string
+          format: uri
+          description: The URL to which SMS messages will be relayed for the specified DIDs
+          example: "https://examples.com/sms-webhook"
     Transcript:
       title: Transcript
       required:
       - phone_number_1
       - phone_number_2
       type: object
+      additionalProperties: false
       properties:
         phone_number_1:
           type: string
@@ -9649,6 +9802,7 @@ components:
       - metrics
       - pagination
       type: object
+      additionalProperties: false
       properties:
         metrics:
           type: array
@@ -9662,6 +9816,7 @@ components:
       required:
       - cities
       type: object
+      additionalProperties: false
       properties:
         cities:
           type: array
@@ -9673,11 +9828,13 @@ components:
       required:
       - opt_out
       type: object
+      additionalProperties: false
       properties:
         opt_out:
           $ref: '#/components/schemas/Optout'
     Transcriptionlanguage:
       title: Transcriptionlanguage
+      nullable: true
       enum:
       - en
       - de
@@ -9711,6 +9868,7 @@ components:
       - to
       - channel
       type: object
+      additionalProperties: false
       properties:
         service_id:
           type: string
@@ -9729,6 +9887,7 @@ components:
       required:
       - is_valid
       type: object
+      additionalProperties: false
       properties:
         is_valid:
           type: boolean
@@ -9737,6 +9896,7 @@ components:
     CdrRetranscribeRequest:
       title: CdrRetranscribeRequest
       type: object
+      additionalProperties: false
       properties:
         language:
           $ref: '#/components/schemas/Transcriptionlanguage'
@@ -9752,6 +9912,7 @@ components:
       - countries
       - usecase
       type: object
+      additionalProperties: false
       properties:
         sender_id:
           type: string
@@ -9804,12 +9965,30 @@ components:
       - call_score
       - call_summary
       type: object
+      additionalProperties: false
       properties:
         transcript:
-          $ref: '#/components/schemas/Transcript'
+          type: object
+          description: Mapping of phone numbers in the call to their transcript text
+          additionalProperties:
+            type: string
+          example:
+            "41562494023": ""
+            "390240325335": ""
         turns:
-          $ref: '#/components/schemas/Turn'
-          description: An array of turn objects. Each object in the array contains text attributed to a particular speaker, along with the start and end times for that text.
+          type: array
+          description: An array of turn objects. Each object contains text attributed to a particular speaker, along with the start and end times for that text.
+          items:
+            $ref: '#/components/schemas/Turn'
+          example:
+            - type: "46844685344"
+              s: 160
+              e: 7280
+              text: "Three, four five, I'm F. good bye."
+            - type: "+16572026750"
+              s: 2400
+              e: 3280
+              text: "text"
         uuid:
           type: string
           description: Unique identifier of the transcription
@@ -9822,7 +10001,7 @@ components:
           format: int32
           example: 102
         charge:
-          type: number
+          type: string
           description: Full charge for the transcription
           example: 0.01
         status:
@@ -9856,6 +10035,7 @@ components:
       - max_sip_channels
       - max_call_rate
       type: object
+      additionalProperties: false
       properties:
         max_call_duration:
           type: integer
@@ -9887,6 +10067,7 @@ components:
       - default_destinations
       - company_info
       type: object
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -9928,11 +10109,12 @@ components:
         default_short_link_endpoint:
           type: string
           description: Default short link endpoint
-          example: https://short.example.com
+          example: https://short.examples.com
         default_destinations:
           type: array
           items:
             type: object
+            additionalProperties: false
             properties:
               transport:
                 type: string
@@ -9948,6 +10130,7 @@ components:
             value: https://webhook.address.com/inboundSMS
         company_info:
           type: object
+          additionalProperties: false
           description: Company information
           properties:
             name:
@@ -9986,6 +10169,7 @@ components:
               example: VAT123456789
             country:
               type: object
+              additionalProperties: false
               description: Country information
               properties:
                 country_name:
@@ -9999,7 +10183,7 @@ components:
     Create2FAVerificationResponse:
       title: Create2FAVerificationResponse
       required:
-      - succes
+      - success
       - service_id
       - session_url
       - session_id
@@ -10007,8 +10191,9 @@ components:
       - created_at
       - number_lookup
       type: object
+      additionalProperties: false
       properties:
-        succes:
+        success:
           type: boolean
           description: Indicates whether the 2FA Verification was successfully created
           example: true
@@ -10040,6 +10225,7 @@ components:
       required:
       - code
       type: object
+      additionalProperties: false
       properties:
         code:
           type: string
@@ -10071,6 +10257,7 @@ components:
       - invoices
       - pagination
       type: object
+      additionalProperties: false
       properties:
         is_empty:
           type: boolean
@@ -10088,6 +10275,7 @@ components:
       required:
       - countries
       type: object
+      additionalProperties: false
       properties:
         countries:
           type: array
@@ -10103,6 +10291,7 @@ components:
       - page
       - per_page
       type: object
+      additionalProperties: false
       properties:
         type:
           type: string
@@ -10137,6 +10326,16 @@ components:
           example: 10
         transcription:
           $ref: '#/components/schemas/Transcription'
+        uuid:
+          type: string
+          description: Call ID
+          example: 99df5ffd-962a-410f-bcce-d08f1f7f328c
+        disposition:
+          allOf:
+            - $ref: '#/components/schemas/Calldisposition'
+            - description: >
+                Filter calls by disposition. In case the parameter is not specified, only answered calls are returned.
+                To get all calls regardless their disposition pass `all` as the parameter value
         page:
           type: integer
           description: Requested page
@@ -10152,6 +10351,7 @@ components:
       required:
       - items
       type: object
+      additionalProperties: false
       properties:
         items:
           type: array
@@ -10163,6 +10363,7 @@ components:
       required:
       - short_link
       type: object
+      additionalProperties: false
       properties:
         short_link:
           type: string
@@ -10177,6 +10378,7 @@ components:
       - charge
       - error
       type: object
+      additionalProperties: false
       properties:
         created_at:
           type: string
@@ -10206,6 +10408,7 @@ components:
       - transactions
       - pagination
       type: object
+      additionalProperties: false
       properties:
         is_empty:
           type: boolean
@@ -10233,6 +10436,7 @@ components:
       - items
       - pagination
       type: object
+      additionalProperties: false
       properties:
         items:
           type: array
@@ -10247,6 +10451,7 @@ components:
       - text
       - media
       type: object
+      additionalProperties: false
       properties:
         text:
           type: string
@@ -10269,6 +10474,7 @@ components:
       - to
       - message_body
       type: object
+      additionalProperties: false
       properties:
         from:
           type: string
@@ -10299,6 +10505,7 @@ components:
       - items
       - pagination
       type: object
+      additionalProperties: false
       properties:
         items:
           type: array
@@ -10310,14 +10517,14 @@ components:
     TrunksResponse:
       title: TrunksResponse
       required:
-      - id
-      - name
-      - callerid
-      - label
-      - allowed_ips
-      - auth_method
-      - created_at
+        - id
+        - name
+        - callerid
+        - label
+        - allowed_ips
+        - created_at
       type: object
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -10431,18 +10638,26 @@ components:
           type: boolean
           description: Encrypted media
           example: true
+        access_token:
+          type: string
+          example: 123easwqe321132
     CDRswithtranscription:
       title: CDRswithtranscription
       required:
       - items
       - pagination
       type: object
+      additionalProperties: false
       properties:
         items:
           type: array
           items:
             $ref: '#/components/schemas/CDRwithTranscription'
           description: List of CDRs with links to call transcriptions
+        prices_url:
+          type: string
+          description: Price url
+          example: 'https://example.com'
         pagination:
           $ref: '#/components/schemas/Pagination'
       description: Call detailed records and transcriptions of recorded calls that match the search criteria
@@ -10467,6 +10682,7 @@ components:
       - charge
       - error_code
       type: object
+      additionalProperties: false
       properties:
         phone_number:
           type: string
@@ -10518,10 +10734,12 @@ components:
           example: false
         reachable:
           type: boolean
+          nullable: true
           description: Indicates whether the number is registered in a mobile network. For mobile phone numbers only. `null` if the phone number is invalid
           example: true
         roaming:
           type: boolean
+          nullable: true
           description: Indicates whether the number is roaming. For mobile phone numbers only. `null` if the phone number is invalid
           example: false
         timezone:
@@ -10543,12 +10761,82 @@ components:
       - dids
       - doc_types
       type: object
+      additionalProperties: false
       properties:
         dids:
           type: array
-          items:
-            $ref: '#/components/schemas/DIDAvailableforPurchase'
           description: A list of phone numbers in the cart
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: Unique identifier of the phone number
+                format: int64
+                example: 541139862174
+              activation_fee:
+                type: string
+                description: A one-time phone number activation fee
+                example: '15.0'
+              monthly_fee:
+                type: string
+                description: A recurring phone number monthly fee
+                example: '10.0'
+              per_min:
+                type: string
+                description: Price per inbound minute
+                example: '0.01'
+              channels:
+                type: integer
+                description: Number of inbound channels
+                format: int32
+                example: 4
+              city:
+                type: string
+                description: A city of a phone number
+                example: Buenos Aires
+              country:
+                type: string
+                description: Country name the phone number originates from
+                example: Argentina
+              country_short_name:
+                type: string
+                description: 2-letter ISO code of the country the phone number originates from
+                example: AR
+              cnam:
+                type: boolean
+                nullable: true
+                description: Indicates if CNAM can be activated on the phone number
+                example: false
+              free_min:
+                type: integer
+                description: Number of free inbound minutes for the phone number
+                format: int32
+                example: 0
+              number:
+                type: string
+                description: The phone number itself
+                example: '541139862174'
+              require_docs:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+                description: A list of documents required to activate the phone number, if any
+                example:
+                  - 1
+                  - 3
+              sms_enabled:
+                type: boolean
+                description: Indicates if the phone number can receive inbound SMS and MMS messages
+                example: false
+              sms_price:
+                type: string
+                description: Price per inbound SMS segment
+                example: '0.25'
+              domestic_cli:
+                type: boolean
+                example: true
         doc_types:
           type: array
           items:
@@ -10580,6 +10868,7 @@ components:
       - async
       - force
       type: object
+      additionalProperties: false
       properties:
         phone_numbers:
           type: array
@@ -10605,6 +10894,7 @@ components:
       - message_id
       - status
       type: object
+      additionalProperties: false
       properties:
         message_id:
           type: string
@@ -10621,6 +10911,7 @@ components:
       - doc_types
       - pagination
       type: object
+      additionalProperties: false
       properties:
         items:
           type: array
@@ -10641,19 +10932,15 @@ components:
       - client
       - any
       type: object
+      additionalProperties: false
       properties:
         agent: {}
         client: {}
         any: {}
     Turn:
       title: Turn
-      required:
-      - type
-      - s
-      - e
-      - text
-      - sentiment
       type: object
+      additionalProperties: false
       properties:
         type:
           type: string
@@ -10691,13 +10978,16 @@ components:
       - user_id
       - link_hash
       type: object
+      additionalProperties: false
       properties:
         latitude:
           type: number
+          nullable: true
           description: The latitude of the location associated to the IP address used when the short link was opened
           example: 59.3247
         longitude:
           type: number
+          nullable: true
           description: The longitude of the location associated to the IP address used when the short link was opened
           example: 18.056
         operating_system:
@@ -10723,17 +11013,21 @@ components:
         created_at:
           type: string
           description: The timestamp indicating when a user opened the short link
-          format: date-time
-          example: 2023-07-19T18:23:42.120Z
+          example: 2023-07-19 18:23:42.120Z
         link_hash:
           type: string
           description: Has of the short link
           example: hd82Jhs21
+        user_id:
+          type: integer
+          description: User id
+          example: 100017
     VoiceCampaignsRequest1:
       title: VoiceCampaignsRequest1
       required:
       - voice_campaign
       type: object
+      additionalProperties: false
       properties:
         voice_campaign:
           $ref: '#/components/schemas/VoiceCampaign'
@@ -10745,6 +11039,7 @@ components:
       - status
       - pending
       type: object
+      additionalProperties: false
       properties:
         status:
           type: string
@@ -10768,6 +11063,7 @@ components:
       required:
         - channel
       type: object
+      additionalProperties: false
       properties:
         channel:
           type: string
@@ -10796,6 +11092,7 @@ components:
       - delivered_at
       - error_message
       type: object
+      additionalProperties: false
       properties:
         message_id:
           type: string
@@ -10891,6 +11188,7 @@ components:
       - delivered_at
       - error_message
       type: object
+      additionalProperties: false
       properties:
         message_id:
           type: string
@@ -10941,6 +11239,7 @@ components:
       - balance
       - global_limits
       type: object
+      additionalProperties: false
       properties:
         balance:
           type: string
@@ -10956,6 +11255,7 @@ components:
       - count
       - items
       type: object
+      additionalProperties: false
       properties:
         status:
           type: string
@@ -11032,6 +11332,7 @@ components:
       required:
       - regions
       type: object
+      additionalProperties: false
       properties:
         regions:
           type: array
@@ -11059,6 +11360,7 @@ components:
       - charge
       - error_code
       type: object
+      additionalProperties: false
       properties:
         phone_number:
           type: string
@@ -11134,6 +11436,7 @@ components:
       - dids
       - pagination
       type: object
+      additionalProperties: false
       properties:
         dids:
           type: array
@@ -11150,6 +11453,7 @@ components:
       - type
       - allowlisted_in
       type: object
+      additionalProperties: false
       properties:
         id:
           type: string
@@ -11177,6 +11481,7 @@ components:
       required:
       - self_service
       type: object
+      additionalProperties: false
       properties:
         self_service:
           type: boolean
@@ -11189,6 +11494,7 @@ components:
       - country
       - current_carrier
       type: object
+      additionalProperties: false
       properties:
         number_type:
           type: string
@@ -11243,12 +11549,15 @@ components:
       - transcription_summary
       - original_file
       type: object
+      additionalProperties: false
       properties:
         transcript:
+          nullable: true
           allOf:
           - $ref: '#/components/schemas/FileTranscript'
           - description: The `transcript` object contains the complete file transcription, with text attributed to each channel.
         turns:
+          nullable: true
           type: array
           items:
             $ref: '#/components/schemas/FileTurn'
@@ -11269,6 +11578,7 @@ components:
           - description: A language used in the transcription
             example: en
         duration:
+          nullable: true
           type: integer
           description: The duration of the uploaded file, in seconds.
           format: int32
@@ -11288,10 +11598,12 @@ components:
           format: date-time
           example: 2023-01-09T10:04:39.734Z
         transcription_score:
+          nullable: true
           type: string
           description: Indicates whether the conversation was positive, negative, or neutral. Scores ranging from 1.0 to 3.0 indicate negative conversation and 4.0 to 5.0 indicate positive.
           example: '3.8'
         transcription_summary:
+          nullable: true
           type: string
           description: A concise summary of the transcribed conversation
           example: The agent and client discussed call recording and call transcription
@@ -11305,6 +11617,8 @@ components:
       - uuid
       - url
       type: object
+      nullable: true
+      additionalProperties: false
       properties:
         uuid:
           type: string
@@ -11319,6 +11633,7 @@ components:
       required:
       - link
       type: object
+      additionalProperties: false
       properties:
         link:
           type: string
@@ -11332,7 +11647,7 @@ components:
         fallback_url:
           type: string
           description: The URL to redirect to if the short link is expired or invalid
-          example: https://example.com/fallback
+          example: https://examples.com/fallback
         phone:
           type: string
           description: The phone number associated with the short link
@@ -11344,6 +11659,7 @@ components:
     ProfileRequest:
       title: ProfileRequest
       type: object
+      additionalProperties: false
       properties:
         additional_info:
           type: string
@@ -11378,6 +11694,7 @@ components:
           description: User's job title
         company_info:
           type: object
+          additionalProperties: false
           properties:
             name:
               type: string
@@ -11419,6 +11736,7 @@ components:
       - caller_id
       - contact
       type: object
+      additionalProperties: false
       properties:
         callflow_id:
           type: integer
@@ -11468,6 +11786,7 @@ components:
       - status
       - error
       type: object
+      additionalProperties: false
       properties:
         request_id:
           type: string
@@ -11494,6 +11813,7 @@ components:
       - charge
       - uuid
       type: object
+      additionalProperties: false
       properties:
         date:
           type: string
@@ -11542,6 +11862,16 @@ components:
           type: string
           description: Call ID
           example: 99df5ffd-962a-410f-bcce-d08f1f7f328c
+        parent_uuid:
+          type: string
+          description: Parent UUID
+          nullable: true
+          example: 99df5ffd-962a-410f-bcce-d08f1f7f328c
+        answered_by:
+          type: string
+          nullable: true
+          description: Answered by
+          example: 'human'
     FileTurn:
       title: FileTurn
       required:
@@ -11551,6 +11881,7 @@ components:
       - text
       - sentiment
       type: object
+      additionalProperties: false
       properties:
         speaker:
           type: string
@@ -11587,6 +11918,7 @@ components:
       - channel_1
       - channel_2
       type: object
+      additionalProperties: false
       properties:
         channel_1:
           type: string
@@ -11598,6 +11930,7 @@ components:
           example: Hello
     MessagesSenderIdResponse:
       type: object
+      additionalProperties: false
       properties:
         id:
           type: string
@@ -11673,6 +12006,7 @@ components:
       - zip
       - state_or_province
       type: object
+      additionalProperties: false
       properties:
         dba_name:
           type: string
@@ -11798,6 +12132,7 @@ components:
       - created_at
       - updated_at
       type: object
+      additionalProperties: false
       properties:
         brand_id:
           type: string
@@ -11933,6 +12268,7 @@ components:
       - items
       - pagination
       type: object
+      additionalProperties: false
       properties:
         items:
           type: array
@@ -11993,6 +12329,7 @@ components:
       - country
       - zip
       type: object
+      additionalProperties: false
       properties:
         dba_name:
           type: string
@@ -12095,6 +12432,7 @@ components:
       - appeal_categories
       - evidence
       type: object
+      additionalProperties: false
       properties:
         brand_id:
           type: string
@@ -12130,6 +12468,7 @@ components:
       - updated_at
       - explanation
       type: object
+      additionalProperties: false
       properties:
         categories:
           type: array
@@ -12187,6 +12526,7 @@ components:
       - code
       - message
       type: object
+      additionalProperties: false
       properties:
         code:
           type: string
@@ -12207,6 +12547,7 @@ components:
       - fields
       - errors
       type: object
+      additionalProperties: false
       properties:
         id:
           type: string
@@ -12238,9 +12579,11 @@ components:
       - vetting_status
       - feedback
       type: object
+      additionalProperties: false
       properties:
         optional_attributes:
           type: object
+          additionalProperties: false
           description: An optional attributes that might be returned from TCR
         vetting_status:
           allOf:
@@ -12257,6 +12600,7 @@ components:
       required:
       - category
       type: object
+      additionalProperties: false
       properties:
         category:
           type: array
@@ -12272,6 +12616,7 @@ components:
       - url
       - uuid
       type: object
+      additionalProperties: false
       properties:
         file_name:
           type: string
@@ -12308,6 +12653,7 @@ components:
       - vetting_status
       - reasond
       type: object
+      additionalProperties: false
       properties:
         evp_id:
           type: string
@@ -12363,6 +12709,7 @@ components:
       - evp_id
       - vetting_class
       type: object
+      additionalProperties: false
       properties:
         evp_id:
           type: string
@@ -12380,6 +12727,7 @@ components:
       - vetting_id
       - vetting_token
       type: object
+      additionalProperties: false
       properties:
         evp_id:
           type: string
@@ -12400,6 +12748,7 @@ components:
       - appeal_categories
       - evidence
       type: object
+      additionalProperties: false
       properties:
         appeal_categories:
           type: array
@@ -12435,6 +12784,7 @@ components:
       - vet_score
       - feedback
       type: object
+      additionalProperties: false
       properties:
         vet_status:
           type: string
@@ -12461,6 +12811,7 @@ components:
       required:
       - reasons
       type: object
+      additionalProperties: false
       properties:
         reasons:
           type: array
@@ -12488,6 +12839,7 @@ components:
       - vetting_class
       - vetting_id
       type: object
+      additionalProperties: false
       properties:
         appeal_outcome:
           allOf:
@@ -12584,6 +12936,7 @@ components:
       - tmobile_brand_dcap
       - tmobile_brand_tier
       type: object
+      additionalProperties: false
       properties:
         att_mms_tpm:
           type: integer
@@ -12680,6 +13033,7 @@ components:
       - monthly_fee
       - usecase
       type: object
+      additionalProperties: false
       properties:
         mno_metadata:
           type: array
@@ -12756,6 +13110,7 @@ components:
       - status
       - phone_numbers
       type: object
+      additionalProperties: false
       properties:
         affiliate_marketing:
           type: boolean
@@ -12967,6 +13322,7 @@ components:
       - items
       - pagination
       type: object
+      additionalProperties: false
       properties:
         items:
           type: array
@@ -13057,6 +13413,7 @@ components:
       - usecase
       - terms_conditions
       type: object
+      additionalProperties: false
       properties:
         affiliate_marketing:
           type: boolean
@@ -13227,6 +13584,7 @@ components:
       - sample5
       - terms_conditions
       type: object
+      additionalProperties: false
       properties:
         affiliate_marketing:
           type: boolean
@@ -13351,6 +13709,7 @@ components:
       - subscription_category
       - url
       type: object
+      additionalProperties: false
       properties:
         subscription_category:
           type: string
@@ -13370,6 +13729,7 @@ components:
       - number
       - status
       type: object
+      additionalProperties: false
       properties:
         number:
           type: string
@@ -13387,6 +13747,7 @@ components:
       - campaign_id
       - numbers
       type: object
+      additionalProperties: false
       properties:
         brand_id:
           type: string
@@ -13405,6 +13766,7 @@ components:
       - nudge_intent
       - description
       type: object
+      additionalProperties: false
       properties:
         nudge_intent:
           type: string
@@ -13424,6 +13786,7 @@ components:
       - country_id
       - country_name
       type: object
+      additionalProperties: false
       properties:
         city_code:
           type: integer
@@ -13458,6 +13821,7 @@ components:
       - average_storage_minutes
       - recorded_minutes
       type: object
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -13499,6 +13863,7 @@ components:
       - call_uuid
       - url
       type: object
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -13535,6 +13900,7 @@ components:
     InvalidRecordingResponse:
       title: InvalidRecordingResponse
       type: object
+      additionalProperties: false
       properties:
         dids:
           type: array
@@ -13555,6 +13921,7 @@ components:
       - id
       - recording_enabled
       type: object
+      additionalProperties: false
       properties:
         id:
           type: string
@@ -13571,6 +13938,7 @@ components:
       - id
       - recording_enabled
       type: object
+      additionalProperties: false
       properties:
         id:
           type: string
@@ -13584,10 +13952,15 @@ components:
     CallWebhookResponse:
       title: CallWebhookResponse
       required:
+        - success
         - event_type
         - url
       type: object
+      additionalProperties: false
       properties:
+        success:
+          type: boolean
+          example: string
         event_type:
           type: string
           description: Type of call events
@@ -13605,6 +13978,7 @@ components:
       description: A list of webhook responses for call events
       items:
         type: object
+        additionalProperties: false
         required:
           - event_type
           - url
@@ -13630,6 +14004,7 @@ components:
       - status
       - default_destinations
       type: object
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -13661,6 +14036,7 @@ components:
           example: 'enabled'
         default_destinations:
           type: object
+          additionalProperties: false
           description: Default endpoints for SMS and DLR
           required:
           - sms_endpoint
@@ -13670,12 +14046,12 @@ components:
               type: string
               format: uri
               description: SMS endpoint URL
-              example: 'https://example.com/sms'
+              example: 'https://examples.com/sms'
             dlr_endpoint:
               type: string
               format: uri
               description: DLR endpoint URL
-              example: 'https://example.com/dlr'
+              example: 'https://examples.com/dlr'
       example:
         id: 123
         created_at: '2023-06-15T10:30:00Z'
@@ -13684,8 +14060,8 @@ components:
         master_organization: 456
         status: 'enabled'
         default_destinations:
-          sms_endpoint: 'https://example.com/sms'
-          dlr_endpoint: 'https://example.com/dlr'
+          sms_endpoint: 'https://examples.com/sms'
+          dlr_endpoint: 'https://examples.com/dlr'
       description: A user response for sub-organizations
     ServiceUnavailableErrorResponse:
       title: ServiceUnavailableErrorResponse
@@ -13703,6 +14079,7 @@ components:
     GenerateWidgetTokenRequest:
       title: GenerateWidgetTokenRequest
       type: object
+      additionalProperties: false
       required:
         - sip_trunk
       properties:
@@ -13712,6 +14089,7 @@ components:
           example: "my-sip-trunk"
         payload:
           type: object
+          additionalProperties: false
           description: Arbitrary data to be associated with the token
           nullable: true
           example: { }
@@ -13723,6 +14101,7 @@ components:
     WidgetTokenResponse:
       title: WidgetTokenResponse
       type: object
+      additionalProperties: false
       required:
         - token
         - uuid
@@ -13742,6 +14121,7 @@ components:
           example: "my-sip-trunk"
         payload:
           type: object
+          additionalProperties: false
           description: Arbitrary data associated with the token
           nullable: true
           example: { }
@@ -13753,6 +14133,7 @@ components:
     WidgetTokenInfo:
       title: WidgetTokenInfo
       type: object
+      additionalProperties: false
       required:
         - uuid
         - sip_trunk
@@ -13767,6 +14148,7 @@ components:
           example: "my-sip-trunk"
         payload:
           type: object
+          additionalProperties: false
           description: Arbitrary data associated with the token
           nullable: true
           example: { }
@@ -13778,15 +14160,18 @@ components:
     UpdateWidgetTokenPayloadRequest:
       title: UpdateWidgetTokenPayloadRequest
       type: object
+      additionalProperties: false
       required:
         - payload
       properties:
         payload:
           type: object
+          additionalProperties: false
           description: Arbitrary data to be associated with the token
           example: { }
     CallRequest:
       type: object
+      additionalProperties: false
       required:
       - from
       - to
@@ -13802,7 +14187,7 @@ components:
         status_callback:
           type: string
           description: Webhook URL to receive call status updates
-          example: "https://example.com/callback"
+          example: "https://examples.com/callback"
         call_recording:
           type: boolean
           description: Specifies whether to record the call
@@ -13833,6 +14218,7 @@ components:
         - success
     CallResponse:
       type: object
+      additionalProperties: false
       properties:
         uuid:
           type: string
@@ -13850,6 +14236,7 @@ components:
           example: "2025-09-22T12:56:38.547Z"
         event_payload:
           type: object
+          additionalProperties: false
           nullable: true
           description: Event-specific data
           example: null
@@ -13888,6 +14275,7 @@ components:
           example: ""
     CallInfo:
       type: object
+      additionalProperties: false
       properties:
         uuid:
           type: string
@@ -13905,6 +14293,7 @@ components:
           example: "2025-09-22T12:56:38.547Z"
         event_payload:
           type: object
+          additionalProperties: false
           nullable: true
           description: Event-specific data
           example: null
@@ -13958,13 +14347,14 @@ components:
         - success
     PlayAudioRequest:
       type: object
+      additionalProperties: false
       required:
       - audio_file
       properties:
         audio_file:
           type: string
           description: URL of the audio file to play
-          example: "https://example.com/audio.wav"
+          example: "https://examples.com/audio.wav"
         delay_before_playing:
           type: integer
           description: Delay before playing the audio, in milliseconds
@@ -13973,6 +14363,7 @@ components:
           example: 1000
     CollectDtmfRequest:
       type: object
+      additionalProperties: false
       properties:
         min_digits:
           type: integer
@@ -14001,22 +14392,24 @@ components:
         callback_url:
           type: string
           description: URL to receive digit collection results
-          example: "https://example.com/dtmf-callback"
+          example: "https://examples.com/dtmf-callback"
     CollectDtmfAudioRequest:
       type: object
+      additionalProperties: false
       required:
       - url
       properties:
         url:
           type: string
           description: URL of the audio file to play before digit collection
-          example: "https://example.com/prompt.wav"
+          example: "https://examples.com/prompt.wav"
         stop_on_keypress:
           type: boolean
           description: Stop audio playback when a digit is pressed
           default: true
     AnswerCallRequest:
       type: object
+      additionalProperties: false
       properties:
         call_recording:
           type: boolean
@@ -14030,7 +14423,7 @@ components:
           type: string
           format: uri
           description: WebSocket URL for call streaming
-          example: "wss://example.com/stream"
+          example: "wss://examples.com/stream"
         stream_type:
           type: string
           enum: [oneway, twoway]
@@ -14046,6 +14439,7 @@ components:
           example: "inbound"
     BrandStatusUpdatedWebhook:
       type: object
+      additionalProperties: false
       properties:
         brand_id:
           type: string
@@ -14057,6 +14451,7 @@ components:
           example: "APPROVED"
     CampaignStatusUpdatedWebhook:
       type: object
+      additionalProperties: false
       properties:
         brand_id:
           type: string
@@ -14072,6 +14467,7 @@ components:
           example: "APPROVED"
     NumberStatusUpdatedWebhook:
       type: object
+      additionalProperties: false
       properties:
         brand_id:
           type: string
@@ -14091,6 +14487,7 @@ components:
           example: "APPROVED"
     StreamCallRequest:
       type: object
+      additionalProperties: false
       required:
       - stream_url
       - stream_type
@@ -14100,7 +14497,7 @@ components:
           type: string
           format: uri
           description: WebSocket URL for call streaming
-          example: "wss://example.com/stream"
+          example: "wss://examples.com/stream"
         stream_type:
           type: string
           enum: [oneway, twoway]
@@ -14191,7 +14588,7 @@ tags:
   description: 'Numbers'
 - name: Cart
   description: 'Numbers'
-- name: My DIDs
+- name: My numbers
   description: 'Numbers'
 - name: Billing
   description: ''
@@ -14216,4 +14613,4 @@ tags:
 - name: Call control
   description: 'Programmable Voice'
 - name: Call recording
-  description: 'Call recording management'  
+  description: 'Call recording management'
