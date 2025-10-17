@@ -1,6 +1,6 @@
 # Wavix API OpenAPI Specification
 
-This repository contains the official Wavix API OpenAPI 3.1 specification in **JSON** and **YAML** formats.  
+This repository contains the official Wavix API OpenAPI specification in **JSON** and **YAML** formats.  
 You can use these files to generate SDKs, test endpoints in Postman or Swagger UI, or integrate the API into your projects.
 
 The current list of Wavix HTTP REST API endpoints can be found here: [https://docs.wavix.com/api-reference/](https://docs.wavix.com/api-reference/)
