@@ -1435,6 +1435,16 @@
             },
             "style": "form",
             "explode": true
+          },
+          {
+            "name": "dids",
+            "in": "query",
+            "description": "A comma-separated string of phone numbers to release from your account (e.g., \"123,456,789\")",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "47832123321,47832123324,478321233215"
+            }
           }
         ],
         "responses": {
@@ -4456,7 +4466,7 @@
                       }
                     },
                     "pagination": {
-                      "$ref": "#/components/schemas/Pagination"
+                      "$ref": "#/components/schemas/WebrtcPagination"
                     }
                   }
                 }
@@ -4906,7 +4916,7 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "",
             "headers": {},
             "content": {
@@ -5126,7 +5136,7 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "",
             "headers": {},
             "content": {
@@ -5148,6 +5158,9 @@
                 }
               }
             }
+          },
+          "204": {
+            "description": null
           },
           "400": {
             "$ref": "#/components/responses/BadRequestError"
@@ -5221,7 +5234,7 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful message submission response",
             "headers": {},
             "content": {
@@ -5240,6 +5253,11 @@
                       "description": "Total charge for the message",
                       "example": "0.0"
                     },
+                    "direction": {
+                      "type": "string",
+                      "description": "Direction of sms",
+                      "example": "outbound"
+                    },
                     "delivered_at": {
                       "type": "string",
                       "description": "Timestamp when the message was delivered",
@@ -5248,6 +5266,7 @@
                     },
                     "error_message": {
                       "type": "string",
+                      "nullable": true,
                       "description": "Error message if the message failed",
                       "example": null
                     },
@@ -5314,8 +5333,7 @@
                     "submitted_at": {
                       "type": "string",
                       "description": "Timestamp when the message was submitted",
-                      "format": "date-time",
-                      "example": "2025-09-22T09:07:53"
+                      "example": "2025-09-22T09:07:53Z"
                     },
                     "tag": {
                       "type": "string",
@@ -5536,6 +5554,7 @@
                             "sent_at": "2023-08-29T12:32:44.000Z",
                             "status": "delivered",
                             "submitted_at": "2023-08-29T12:32:44.000Z",
+                            "carrier_fees": "0.0",
                             "tag": null,
                             "to": "447537151866"
                           }
@@ -5664,7 +5683,6 @@
             "explode": true,
             "schema": {
               "type": "string",
-              "format": "date-time",
               "example": "2023-04-10 00:00:00"
             }
           },
@@ -5676,7 +5694,6 @@
             "explode": true,
             "schema": {
               "type": "string",
-              "format": "date-time",
               "example": "2023-04-13 23:59:59"
             }
           },
@@ -5788,14 +5805,11 @@
               "application/x-ndjson": {
                 "schema": {
                   "type": "string",
-                  "description": "Newline-delimited JSON stream of message objects",
+                  "description": "Stream of newline-delimited JSON objects (NDJSON).\nEach line is a valid JSON object.\n",
                   "example": "{\"message_id\":\"3a525ca2-6909-4c72-9399-905adf7f3a74\",\"message_type\":\"sms\",\"from\":\"15072429497\",\"to\":\"16419252149\",\"direction\":\"outbound\",\"status\":\"delivered\"}\n{\"message_id\":\"4b636ca3-7900-5d83-a400-016bf8f8f4b85\",\"message_type\":\"sms\",\"from\":\"15072429497\",\"to\":\"16419252150\",\"direction\":\"outbound\",\"status\":\"delivered\"}\n"
                 }
               }
             }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequestError"
           },
           "403": {
             "$ref": "#/components/responses/ForbiddenError"
@@ -6958,17 +6972,26 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/10DLCBrandappealevidence"
+                  "type": "object",
+                  "required": [
+                    "items"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "description": "List of uploaded evidence files",
+                      "items": {
+                        "$ref": "#/components/schemas/10DLCBrandappealevidence"
+                      }
+                    }
                   },
                   "example": {
                     "items": [
                       {
-                        "file_name": "image.png",
+                        "file_name": "file.png",
                         "mime_type": "image/png",
-                        "url": "https://api.wavix.dev/v3/10dlc/brands/B6AI7PA/evidence/191eb205-8357-4d71-b8da-160a25a000d7",
-                        "uuid": "191eb205-8357-4d71-b8da-160a25a000d7"
+                        "url": "https://api.qa1.wavix.dev/v3/10dlc/brands/BRGQVL0/evidence/3d8d97b6-61f7-4f91-8c1c-7ef83828e072",
+                        "uuid": "3d8d97b6-61f7-4f91-8c1c-7ef83828e072"
                       }
                     ]
                   }
@@ -12304,6 +12327,11 @@
             "description": "Destination phone number",
             "example": "447537151866"
           },
+          "carrier_fees": {
+            "type": "string",
+            "format": "float",
+            "example": "0.0"
+          },
           "direction": {
             "type": "string",
             "description": "Message direction. Can be either `outbound` or `inbound`",
@@ -12347,20 +12375,17 @@
           "submitted_at": {
             "type": "string",
             "description": "Timestamp the messages is accepted by the platform",
-            "format": "date-time",
             "example": "2022-04-14T13:51:16.096Z"
           },
           "sent_at": {
             "type": "string",
             "description": "Timestamp the messages is sent, for mobile terminated messages only. For mobile originated messages the parameter is not returned.",
-            "format": "date-time",
             "nullable": true,
             "example": "2022-04-14T13:51:16.096Z"
           },
           "delivered_at": {
             "type": "string",
             "description": "Timestamp DLR is received for mobile terminated messages or timestamp the messages was successfully relayed to a webhook for mobile originated messages.",
-            "format": "date-time",
             "nullable": true,
             "example": "2022-04-14T13:51:16.096Z"
           },
@@ -13397,6 +13422,43 @@
           "doc_type_id": 1,
           "status": "approved",
           "url": "https://api.wavix.com/v1/mydids/24882/papers/1"
+        }
+      },
+      "WebrtcPagination": {
+        "title": "Pagination",
+        "required": [
+          "current_page",
+          "limit",
+          "total",
+          "total_pages"
+        ],
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "current_page": {
+            "type": "integer",
+            "description": "Current page number",
+            "format": "int32",
+            "example": 2
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of records per page",
+            "format": "int32",
+            "example": 25
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total number of records",
+            "format": "int32",
+            "example": 101
+          },
+          "total_pages": {
+            "type": "integer",
+            "description": "Total number of pages",
+            "format": "int32",
+            "example": 5
+          }
         }
       },
       "Pagination": {
@@ -14784,7 +14846,7 @@
           },
           "media": {
             "maxItems": 5,
-            "minItems": 1,
+            "minItems": 0,
             "type": "array",
             "items": {
               "type": "string"
@@ -15651,20 +15713,17 @@
           "submitted_at": {
             "type": "string",
             "description": "Timestamp the messages is accepted by the platform",
-            "format": "date-time",
             "example": "2022-04-14T13:51:16.096Z"
           },
           "sent_at": {
             "type": "string",
             "description": "Timestamp the messages is sent, for mobile terminated messages only. For mobile originated messages the parameter is not returned.",
-            "format": "date-time",
             "nullable": true,
             "example": "2022-04-14T13:51:16.096Z"
           },
           "delivered_at": {
             "type": "string",
             "description": "Timestamp DLR is received for mobile terminated messages or timestamp the messages was successfully relayed to a webhook for mobile originated messages.",
-            "format": "date-time",
             "nullable": true,
             "example": "2022-04-14T13:51:16.096Z"
           },
@@ -16055,6 +16114,10 @@
               "type": "string"
             },
             "description": "An array of 2 letter ISO codes of the countries the Sender ID is allow listed in"
+          },
+          "usecase": {
+            "type": "string",
+            "example": "promo"
           },
           "samples": {
             "type": "array",
@@ -16733,6 +16796,9 @@
       },
       "10DLCBrandregistrationrequest": {
         "title": "10DLCBrandregistrationrequest",
+        "type": "object",
+        "description": "10DLC Brand registration request",
+        "additionalProperties": false,
         "required": [
           "dba_name",
           "company_name",
@@ -16746,139 +16812,199 @@
           "email",
           "street_address",
           "city",
+          "state_or_province",
           "country",
-          "zip",
-          "state_or_province"
+          "zip"
         ],
-        "type": "object",
-        "additionalProperties": false,
         "properties": {
           "dba_name": {
             "type": "string",
-            "description": "Brand name or DBA",
-            "example": "Brand"
+            "description": "Brand name or DBA (Doing Business As)",
+            "maxLength": 255,
+            "example": "111 RANDOM ORG TEST"
           },
           "company_name": {
             "type": "string",
             "description": "Legal name of the company",
-            "example": "Company"
+            "maxLength": 255,
+            "example": "111 RANDOM ORG TEST"
           },
           "entity_type": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/10DLCBrandentitytype"
-              },
-              {
-                "description": "The company entity type",
-                "example": "PRIVATE_PROFIT"
-              }
-            ]
+            "type": "string",
+            "description": "The company entity type",
+            "enum": [
+              "PRIVATE_PROFIT",
+              "PUBLIC_PROFIT",
+              "NON_PROFIT",
+              "GOVERNMENT"
+            ],
+            "example": "PUBLIC_PROFIT"
           },
           "vertical": {
             "type": "string",
-            "description": "The segment the business operates in",
-            "example": "HEALTHCARE"
+            "description": "The segment or industry in which the business operates",
+            "enum": [
+              "HEALTHCARE",
+              "PROFESSIONAL",
+              "RETAIL",
+              "TECHNOLOGY",
+              "EDUCATION",
+              "FINANCIAL",
+              "NON_PROFIT",
+              "GOVERNMENT",
+              "OTHER"
+            ],
+            "example": "PROFESSIONAL"
           },
           "ein_taxid": {
             "type": "string",
-            "description": "IRS Employee Identification Number (EIN) for US-based or foreign companies with EIN. The numeric portion of Tax ID for companies incorporated in other countries.",
-            "example": "999999999"
+            "description": "IRS Employee Identification Number (EIN) for US-based or foreign companies with EIN.  \nFor non-US entities, provide the numeric portion of the local Tax ID.\n",
+            "maxLength": 21,
+            "example": "12-2142342"
           },
           "ein_taxid_country": {
             "type": "string",
             "description": "2-letter ISO country code of the Tax ID issuing country",
+            "minLength": 2,
+            "maxLength": 2,
             "example": "US"
           },
           "website": {
             "type": "string",
-            "description": "The website of the business",
-            "example": "https://brand.com"
+            "description": "The website of the business (optional)",
+            "maxLength": 255,
+            "example": "Tess.com"
           },
           "stock_symbol": {
             "type": "string",
-            "description": "The stock symbol of the Brand. For PUBLIC_PROFIT Brands only.",
-            "nullable": true
+            "description": "The stock symbol of the Brand.  \n**Required only if** `entity_type` is `PUBLIC_PROFIT`; otherwise **must be null**.\n",
+            "maxLength": 10,
+            "nullable": true,
+            "example": "TEST"
           },
           "stock_exchange": {
             "type": "string",
-            "description": "The stock exchange code. For PUBLIC_PROFIT Brands only.",
-            "nullable": true
+            "description": "The stock exchange code.  \n**Required only if** `entity_type` is `PUBLIC_PROFIT`; otherwise **must be null**.\n",
+            "maxLength": 10,
+            "nullable": true,
+            "example": "NASDAQ"
           },
           "first_name": {
             "type": "string",
             "description": "The first name of the business contact",
-            "example": "John"
+            "maxLength": 100,
+            "example": "Test 1"
           },
           "last_name": {
             "type": "string",
             "description": "The last name of the business contact",
-            "example": "Dow"
+            "maxLength": 100,
+            "example": "Test1"
           },
           "phone_number": {
             "type": "string",
             "description": "The support contact telephone in E.164 format",
-            "example": "12123450099"
+            "maxLength": 20,
+            "example": "12046661776"
           },
           "email": {
             "type": "string",
             "description": "The email address of the support contact",
-            "example": "support@brand.com"
+            "format": "email",
+            "maxLength": 100,
+            "example": "Test@crsrr.com"
           },
           "street_address": {
             "type": "string",
             "description": "Street name and house number",
-            "example": "10, City Name"
+            "maxLength": 100,
+            "example": "123 rtst"
           },
           "city": {
             "type": "string",
             "description": "The city name",
-            "example": "Miami"
+            "maxLength": 100,
+            "example": "Test"
           },
           "state_or_province": {
             "type": "string",
-            "description": "State or province. For the United States, use 2 character codes.",
+            "description": "State or province. For the United States, use 2-character state codes.",
+            "maxLength": 20,
             "nullable": true,
-            "example": "FL"
-          },
-          "country": {
-            "type": "string",
-            "description": "2-letter ISO country code the business address",
-            "example": "US"
+            "example": "AL"
           },
           "zip": {
             "type": "string",
-            "description": "The business zip or postal code",
+            "description": "The business ZIP or postal code",
+            "maxLength": 10,
             "example": "12345"
+          },
+          "country": {
+            "type": "string",
+            "description": "2-letter ISO country code of the business address",
+            "minLength": 2,
+            "maxLength": 2,
+            "example": "US"
           },
           "mock": {
             "type": "boolean",
-            "description": "Indicates a mock Brand. You can create mock Brands for testing purposes only, production traffic with the mock Brands is prohibited.",
+            "description": "Indicates a mock Brand.  \nMock Brands are for testing only — **production traffic with mock Brands is prohibited**.\n",
             "default": false,
             "example": false
           }
         },
-        "description": "10DLC Brand registration request",
+        "oneOf": [
+          {
+            "description": "PUBLIC_PROFIT brands must provide stock_symbol and stock_exchange.",
+            "properties": {
+              "entity_type": {
+                "const": "PUBLIC_PROFIT"
+              }
+            },
+            "required": [
+              "stock_symbol",
+              "stock_exchange"
+            ]
+          },
+          {
+            "description": "Non-PUBLIC_PROFIT brands must not include stock_symbol or stock_exchange.",
+            "properties": {
+              "entity_type": {
+                "enum": [
+                  "PRIVATE_PROFIT",
+                  "NON_PROFIT",
+                  "GOVERNMENT"
+                ]
+              },
+              "stock_symbol": {
+                "type": "null"
+              },
+              "stock_exchange": {
+                "type": "null"
+              }
+            }
+          }
+        ],
         "example": {
-          "city": "Miami",
-          "company_name": "Company legal name",
-          "country": "US",
-          "dba_name": "New Brand",
-          "ein_taxid": "123456789",
+          "dba_name": "111 RANDOM ORG TEST",
+          "company_name": "111 RANDOM ORG TEST",
+          "entity_type": "PUBLIC_PROFIT",
+          "vertical": "PROFESSIONAL",
+          "ein_taxid": "12-2142342",
           "ein_taxid_country": "US",
-          "email": "email@brand.com",
-          "entity_type": "PRIVATE_PROFIT",
-          "first_name": "John",
-          "last_name": "Dow",
-          "mock": false,
-          "phone_number": "12123450099",
-          "status": "VERIFIED",
-          "stock_exchange": null,
-          "stock_symbol": null,
-          "street_address": "10, Street name",
-          "vertical": "HEALTHCARE",
-          "website": "https://brand.com",
+          "website": "Tess.com",
+          "stock_symbol": "TEST",
+          "stock_exchange": "NASDAQ",
+          "first_name": "Test 1",
+          "last_name": "Test1",
+          "phone_number": "12046661776",
+          "email": "Test@crsrr.com",
+          "street_address": "123 rtst",
+          "city": "Test",
+          "state_or_province": "AL",
           "zip": "12345",
-          "state_or_province": "AK"
+          "country": "US",
+          "mock": false
         }
       },
       "10DLCBrand": {
@@ -17034,13 +17160,11 @@
           "created_at": {
             "type": "string",
             "description": "Date and time the Brand was created",
-            "format": "date-time",
             "example": "2024-07-24T08:29:09"
           },
           "updated_at": {
             "type": "string",
             "description": "Date and time the Brand was updated",
-            "format": "date-time",
             "example": "2024-07-24T08:29:09"
           }
         },
@@ -17139,160 +17263,156 @@
       },
       "10DLCBrandupdaterequest": {
         "title": "10DLCBrandupdaterequest",
-        "required": [
-          "dba_name",
-          "company_name",
-          "entity_type",
-          "vertical",
-          "ein_taxid",
-          "ein_taxid_country",
-          "first_name",
-          "last_name",
-          "phone_number",
-          "email",
-          "street_address",
-          "city",
-          "country",
-          "zip"
-        ],
         "type": "object",
         "additionalProperties": false,
+        "description": "A request to update a 10DLC Brand details.",
         "properties": {
           "dba_name": {
             "type": "string",
-            "description": "Brand name or DBA",
+            "description": "Brand name or DBA (Doing Business As)",
+            "maxLength": 255,
             "example": "Brand"
           },
           "company_name": {
             "type": "string",
             "description": "Legal name of the company",
+            "maxLength": 255,
             "example": "Company"
           },
           "entity_type": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/10DLCBrandentitytype"
-              },
-              {
-                "description": "The company entity type",
-                "example": "PRIVATE_PROFIT"
-              }
-            ]
+            "type": "string",
+            "description": "The company entity type",
+            "enum": [
+              "PRIVATE_PROFIT",
+              "PUBLIC_PROFIT",
+              "NON_PROFIT",
+              "GOVERNMENT"
+            ],
+            "example": "PRIVATE_PROFIT"
           },
           "vertical": {
             "type": "string",
-            "description": "The segment the business operates in",
+            "description": "The segment or industry the business operates in",
+            "enum": [
+              "HEALTHCARE",
+              "PROFESSIONAL",
+              "RETAIL",
+              "TECHNOLOGY",
+              "EDUCATION",
+              "FINANCIAL",
+              "NON_PROFIT",
+              "GOVERNMENT",
+              "OTHER"
+            ],
             "example": "HEALTHCARE"
           },
           "ein_taxid": {
             "type": "string",
-            "description": "IRS Employee Identification Number (EIN) for US-based or foreign companies with EIN. The numeric portion of Tax ID for companies incorporated in other countries.",
+            "description": "IRS Employee Identification Number (EIN) for US-based or foreign companies with EIN.  \nFor companies in other countries, provide the numeric portion of the Tax ID.\n",
+            "maxLength": 21,
             "example": "999999999"
           },
           "ein_taxid_country": {
             "type": "string",
             "description": "2-letter ISO country code of the Tax ID issuing country",
+            "minLength": 2,
+            "maxLength": 2,
             "example": "US"
           },
           "website": {
             "type": "string",
             "description": "The website of the business",
+            "maxLength": 255,
             "example": "https://brand.com"
           },
           "stock_symbol": {
             "type": "string",
-            "description": "The stock symbol of the Brand. For PUBLIC_PROFIT Brands only.",
-            "nullable": true
+            "description": "The stock symbol of the Brand.  \n**Required only if** `entity_type` is `PUBLIC_PROFIT`; otherwise **must be null**.\n",
+            "maxLength": 10,
+            "nullable": true,
+            "example": "TEST"
           },
           "stock_exchange": {
             "type": "string",
-            "description": "The stock exchange code. For PUBLIC_PROFIT Brands only.",
-            "nullable": true
+            "description": "The stock exchange code.  \n**Required only if** `entity_type` is `PUBLIC_PROFIT`; otherwise **must be null**.\n",
+            "maxLength": 10,
+            "nullable": true,
+            "example": "test"
           },
           "first_name": {
             "type": "string",
             "description": "The first name of the business contact",
+            "maxLength": 100,
             "example": "John"
           },
           "last_name": {
             "type": "string",
             "description": "The last name of the business contact",
+            "maxLength": 100,
             "example": "Dow"
           },
           "phone_number": {
             "type": "string",
             "description": "The support contact telephone in E.164 format",
+            "maxLength": 20,
             "example": "12123450099"
           },
           "email": {
             "type": "string",
             "description": "The email address of the support contact",
+            "maxLength": 100,
+            "format": "email",
             "example": "support@brand.com"
           },
           "street_address": {
             "type": "string",
             "description": "Street name and house number",
+            "maxLength": 100,
             "example": "10, City Name"
           },
           "city": {
             "type": "string",
             "description": "The city name",
+            "maxLength": 100,
             "example": "Miami"
           },
           "state_or_province": {
             "type": "string",
-            "description": "State or province. For the United States, use 2 character codes.",
+            "description": "State or province. For the United States, use 2-letter state codes.",
+            "maxLength": 20,
             "nullable": true,
             "example": "FL"
           },
-          "country": {
-            "type": "string",
-            "description": "2-letter ISO country code the business address",
-            "example": "US"
-          },
           "zip": {
             "type": "string",
-            "description": "The business zip or postal code",
-            "example": "12345"
+            "description": "The business ZIP or postal code",
+            "maxLength": 10,
+            "example": "12346"
+          },
+          "country": {
+            "type": "string",
+            "description": "2-letter ISO country code for the business address",
+            "minLength": 2,
+            "maxLength": 2,
+            "example": "US"
+          },
+          "mock": {
+            "type": "boolean",
+            "description": "Mock flag for testing (optional, defaults to false)",
+            "default": false,
+            "example": false
           }
-        },
-        "description": "A request to update a 10DLC Brand details",
-        "example": {
-          "city": "Miami",
-          "company_name": "Company legal name",
-          "country": "US",
-          "dba_name": "New Brand",
-          "ein_taxid": "123456789",
-          "ein_taxid_country": "US",
-          "email": "email@brand.com",
-          "entity_type": "PRIVATE_PROFIT",
-          "first_name": "John",
-          "last_name": "Dow",
-          "phone_number": "12123450099",
-          "stock_exchange": null,
-          "stock_symbol": null,
-          "street_address": "10, Street name",
-          "vertical": "HEALTHCARE",
-          "website": "https://brand.com",
-          "zip": "12345",
-          "state_or_province": "AK"
         }
       },
       "BrandIdentityverificationappealrequest": {
         "title": "BrandIdentityverificationappealrequest",
         "required": [
-          "brand_id",
           "appeal_categories",
           "evidence"
         ],
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "brand_id": {
-            "type": "string",
-            "description": "Unique identifier of the Brand",
-            "example": "BM20QP9"
-          },
           "appeal_categories": {
             "type": "array",
             "items": {
@@ -17575,14 +17695,14 @@
         "title": "10DLCBrandexternalvetting",
         "required": [
           "evp_id",
-          "created_date",
+          "create_date",
           "vetted_date",
           "vetting_id",
           "vetting_token",
           "vetting_score",
           "vetting_class",
           "vetting_status",
-          "reasond"
+          "reasons"
         ],
         "type": "object",
         "additionalProperties": false,
@@ -17592,10 +17712,9 @@
             "description": "External vetting provider code",
             "example": "AEGIS"
           },
-          "created_date": {
+          "create_date": {
             "type": "string",
             "description": "The date and time the vetting request is created",
-            "format": "date-time",
             "example": "2024-08-01T14:09:43"
           },
           "vetting_details": {
@@ -17610,8 +17729,8 @@
           },
           "vetted_date": {
             "type": "string",
+            "nullable": true,
             "description": "The date and time the vetting request is competed",
-            "format": "date-time",
             "example": "2024-08-01T14:09:43"
           },
           "vetting_id": {
@@ -17621,11 +17740,13 @@
           },
           "vetting_token": {
             "type": "string",
+            "nullable": true,
             "description": "Unique vetting token",
             "example": "3oDcE1vq8OR43claMa6Thu/7V4vzZywAfKRgiJnXDjlw+08wpWbGqOssAXKgeZibHCLaGgXvU/yPb7kISeeb5qGdisGRLdhPnSNpvRR82RnCWYNpTp92orlJWjTJU8ZGmNxL5MwK0tt/9SxCha36iTtPV2+4vND8xCPe5suItuQTonG4A3Yi6F1LMqihgwdesRjxJnKqcE7Thcv9ug1NyNPYEZQvPugFj2F2DdU6jFZcOWgXsnE7ucZ+xNaNX9LkF9if3v0hrcviG9L8bUUrpPBGr02txP0i+cPBTLbj4Rq1Ox83R+WUx1gnoXHCIU1ByDGWvQq2Ef4qxGVOwPJHJbja1BovxKBk4YJxiz8OSO68QAIEfxuPTpj5eZz7KEFtFmBIVaVmxBDe4b8Tpl01C2rek7xgPzXaoURvh7CQVnVmJL00DTWKvyOmUOQQW901XEcgcJ7VWgfIvxhIMuXEXXtVDGNowmEc9JQXXYHVlGuN5QicSbApkwwqRZI7TQ4lsS66zCfqomIIJyBNRJpl+8sGwsa2J2h6fEkAD77J9zdUgIKXMFamHbvRadCKMZNIbMrkOC7PuOjZdSiWKh5A8FSjzkv3PlN2hRDqkaODEoodp5pTQeBtNe37+uAMOuHNfsZXlwvfMgCZjiZJ9HQNSLhJBUq7/IvT/EzszUk4HPTj/WFSbT1YrrkDi+zrB20ZDY9lZFWxN1hlYQoNcanDAAWPmw/yW1+8DroL5WIMGsXX3WFGOG7eWB1GHgFQsziAeRQl78u1qOvsRMN08+GrkASBJwqwy5l7xCesUKqbz3O0QA/dwzzsWIDvFPavZpjqMBSjRTurQLFahAaGmdY0BX/Ii+s2+OxfaHQIa1lgucm0P7GPKeZvLX/8boO01Onr/87ra+NX7ABvQb+SXvwsg+Bm5CziWB6DMKDKRD/KQjHxpjIY35UwSEW7G4ixux7ufizXttthHfPJWd/rWFhfYigFhVLgIPCR12smwFVuZwM7ujvY2CIM0X4E0dsX9uVHkgYmqRIdNf5vshpmRuIcHsXZpTJP/tD7zQM6m214c5xkJSfAVIaD7WzRYS4eVL+R3z4u+6n5p6FjuWSjSzuEffUai3HCWjes4JbtDSjIwoG0tOMtBukgPbreH+pjXcvnhU+1QhCV2aIdG6C3FmaI5Uoo/mthJyiFAThwtOpxQ5YkdsRunqVVEFYZfMNEn4Ig2clCFrLOm46JB2wPcLGP2MoH5RqajYzQ6IV8IXIFQVzG0C7HoHsBkVp+GrpnH6N0FCKR+fpbGjigM2lLf4pYBhChUY4ao9hvV1hd8ikS6QoasvDLPytBBa1YAwbSa8d7YdwO6fXfQqetfS8S9gbHD0zxazw5p9Lp5fXFmajDNkD2voYNMzOHJMMHG/49pWV2"
           },
           "vetting_score": {
             "type": "integer",
+            "nullable": true,
             "description": "The assigned Brand vetting score",
             "format": "int32",
             "example": 80
@@ -17641,8 +17762,12 @@
             "example": "PENDING"
           },
           "reasons": {
-            "type": "string",
-            "description": "Reason",
+            "type": "array",
+            "nullable": true,
+            "description": "List of reasons",
+            "items": {
+              "type": "string"
+            },
             "example": "Company size as reported by government or business sources resulted in a score deduction: size range 6-10"
           }
         },
@@ -17977,10 +18102,10 @@
             "nullable": true
           },
           "att_tpm_scope": {
-            "type": "integer",
+            "type": "string",
+            "nullable": true,
             "description": "The message throughput score on the AT&T mobile networks",
-            "format": "int32",
-            "nullable": true
+            "format": "int32"
           },
           "help_required": {
             "type": "boolean",
@@ -18043,7 +18168,8 @@
           "tmobile_brand_tier": {
             "type": "string",
             "description": "The Brand tier for the T-Mobile mobile networks",
-            "example": "LOW"
+            "example": "LOW",
+            "nullable": true
           }
         },
         "description": "",
@@ -18182,13 +18308,11 @@
           "last_bill_date": {
             "type": "string",
             "description": "The date and time the Campaign was billed",
-            "format": "date-time",
             "example": "2024-08-14T11:57:42"
           },
           "next_bill_date": {
             "type": "string",
             "description": "The date and time the Campaign will be billed next time",
-            "format": "date-time",
             "example": "2024-08-14T11:57:42"
           },
           "direct_lending": {
@@ -18289,7 +18413,6 @@
           "created_at": {
             "type": "string",
             "description": "Date and time the Campaign was created",
-            "format": "date-time",
             "example": "2024-08-14T11:57:41"
           },
           "sample1": {
@@ -18320,7 +18443,6 @@
           "updated_at": {
             "type": "string",
             "description": "Date and time the Campaign was last updated",
-            "format": "date-time",
             "example": "2024-08-14T11:57:47"
           },
           "mock": {
@@ -18705,174 +18827,211 @@
       },
       "10DLCCampaignupdaterequest": {
         "title": "10DLCCampaignupdaterequest",
-        "required": [
-          "affiliate_marketing",
-          "age_gated",
-          "auto_renewal",
-          "direct_lending",
-          "embedded_links",
-          "embedded_phones",
-          "embedded_link_sample",
-          "description",
-          "optin_workflow",
-          "help_keywords",
-          "help_message",
-          "optin_keywords",
-          "optin_message",
-          "optout_keywords",
-          "optout_message",
-          "name",
-          "sample1",
-          "sample2",
-          "sample3",
-          "sample4",
-          "sample5",
-          "terms_conditions"
-        ],
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "affiliate_marketing": {
+          "name": {
+            "type": "string",
+            "description": "A user-defined Campaign name (max 120 characters)",
+            "maxLength": 120,
+            "example": "UPDATED TEST ORG CAMPAIGN"
+          },
+          "usecase": {
+            "type": "string",
+            "description": "Campaign use case",
+            "enum": [
+              "CUSTOMER_CARE",
+              "MARKETING",
+              "ACCOUNT_NOTIFICATION",
+              "FRAUD_ALERT",
+              "PUBLIC_SERVICE_ANNOUNCEMENT",
+              "SECURITY_ALERT"
+            ],
+            "example": "MARKETING"
+          },
+          "description": {
+            "type": "string",
+            "description": "The Campaign description (min 40, max 4096 characters)",
+            "minLength": 40,
+            "maxLength": 4096,
+            "example": "UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN"
+          },
+          "embedded_links": {
             "type": "boolean",
-            "description": "Indicates whether the Campaign is used for affiliate marketing",
+            "description": "Indicates whether the Campaign messages contain embedded links",
+            "default": false,
+            "example": false
+          },
+          "embedded_phones": {
+            "type": "boolean",
+            "description": "Indicates whether the Campaign messages contain embedded phone numbers",
+            "default": false,
             "example": false
           },
           "age_gated": {
             "type": "boolean",
             "description": "Indicates whether the Campaign messages contain age-gated content",
+            "default": false,
             "example": false
-          },
-          "auto_renewal": {
-            "type": "boolean",
-            "description": "Indicates whether the Campaign should be automatically renewed",
-            "example": true
           },
           "direct_lending": {
             "type": "boolean",
             "description": "Indicates whether the Campaign messages contain direct lending content",
-            "example": true
+            "default": false,
+            "example": false
           },
-          "embedded_links": {
+          "optin": {
             "type": "boolean",
-            "description": "Indicates whether the Campaign messages contain embedded links",
+            "description": "Indicates whether the Campaign supports opt-in functionality",
+            "default": false,
             "example": true
           },
-          "embedded_phones": {
+          "optout": {
             "type": "boolean",
-            "description": "Indicates whether the Campaign messages contain embedded phone numbers",
+            "description": "Indicates whether the Campaign supports opt-out functionality",
+            "default": false,
             "example": true
           },
-          "embedded_link_sample": {
-            "type": "string",
-            "description": "An embedded link sample",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "description": "The Campaign description",
-            "example": "Our campaign aims to …"
-          },
-          "optin_workflow": {
-            "type": "string",
-            "description": "The opt-in workflow - the process through which consumers opt-in to the Campaign",
-            "example": "Our SMS ..."
-          },
-          "help_keywords": {
-            "type": "string",
-            "description": "A comma-separated list of HELP keywords. The HELP keywords are case-insensitive.",
-            "example": "help"
-          },
-          "help_message": {
-            "type": "string",
-            "description": "An acknowledgement to be sent when a HELP keyword is received",
-            "example": "For help, please visit www.site.com. To opt out, reply STOP."
-          },
-          "optin_keywords": {
-            "type": "string",
-            "description": "A comma-separated list of OPT-IN keywords. The OPT-IN keywords are case-insensitive.",
-            "example": "begin,start"
-          },
-          "optin_message": {
-            "type": "string",
-            "description": "An acknowledgement to be sent when an OPT-IN keyword is received",
-            "example": "You are now opted-in for help please reply HELP, to stop please reply STOP"
-          },
-          "optout_keywords": {
-            "type": "string",
-            "description": "A comma-separated list of OPT-OUT keywords. The OPT-OUT keywords are case-insensitive.",
-            "example": "stop,quit,unsubscribe"
-          },
-          "optout_message": {
-            "type": "string",
-            "description": "An acknowledgement to be sent when an OPT-OUT keyword is received",
-            "example": "You are now opted out and will receive no further messages"
-          },
-          "name": {
-            "type": "string",
-            "description": "A user-defined Campaign name",
-            "example": "My first campaign"
+          "help": {
+            "type": "boolean",
+            "description": "Indicates whether the Campaign provides HELP responses",
+            "default": false,
+            "example": true
           },
           "sample1": {
             "type": "string",
-            "description": "Message sample",
-            "example": "Your verification code is XXXXXX"
+            "description": "Message sample (min 20, max 1024 characters)",
+            "minLength": 20,
+            "maxLength": 1024,
+            "example": "TEST ORG CAMPAIGN SAMPLE 1 TEST ORG CAMPAIGN SAMPLE 1"
           },
           "sample2": {
             "type": "string",
-            "description": "Message sample",
-            "nullable": true
+            "description": "Message sample (min 20, max 1024 characters)",
+            "minLength": 20,
+            "maxLength": 1024,
+            "example": "TEST ORG CAMPAIGN SAMPLE 2 TEST ORG CAMPAIGN SAMPLE 2"
           },
           "sample3": {
             "type": "string",
-            "description": "Message sample",
-            "nullable": true
+            "description": "Message sample (min 20, max 1024 characters)",
+            "minLength": 20,
+            "maxLength": 1024,
+            "example": "TEST ORG CAMPAIGN SAMPLE 3 TEST ORG CAMPAIGN SAMPLE 3"
           },
           "sample4": {
             "type": "string",
-            "description": "Message sample",
-            "nullable": true
+            "description": "Message sample (min 20, max 1024 characters)",
+            "minLength": 20,
+            "maxLength": 1024,
+            "example": "TEST ORG CAMPAIGN SAMPLE 4 TEST ORG CAMPAIGN SAMPLE 4"
           },
           "sample5": {
             "type": "string",
-            "description": "Message sample",
-            "nullable": true
+            "description": "Message sample (min 20, max 1024 characters)",
+            "minLength": 20,
+            "maxLength": 1024,
+            "example": "TEST ORG CAMPAIGN SAMPLE 5 TEST ORG CAMPAIGN SAMPLE 5"
           },
-          "privacy_policy": {
+          "optin_workflow": {
             "type": "string",
-            "description": "A link to the Campaign privacy policy",
-            "example": "https://site.com/privacy-policy"
+            "description": "The opt-in workflow description (min 40, max 4096 characters)",
+            "minLength": 40,
+            "maxLength": 4096,
+            "example": "UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN."
+          },
+          "help_message": {
+            "type": "string",
+            "description": "Message sent in response to HELP keyword (required if `help` is true)",
+            "minLength": 20,
+            "maxLength": 320,
+            "example": "UPDATED TEST ORG CAMPAIGN optin message. For help visit https://test-test-test.test@crsrr.com"
+          },
+          "optin_message": {
+            "type": "string",
+            "description": "Message sent when a user opts in (required if `optin` is true)",
+            "minLength": 20,
+            "maxLength": 320,
+            "example": "TEST ORG CAMPAIGN optin message. You are now opted IN! Enjoy our test platform"
+          },
+          "optout_message": {
+            "type": "string",
+            "description": "Message sent when a user opts out (required if `optout` is true)",
+            "minLength": 20,
+            "maxLength": 320,
+            "example": "TEST ORG CAMPAIGN optin message. You are now opted OUT! Enjoy our test platform"
+          },
+          "auto_renewal": {
+            "type": "boolean",
+            "description": "Indicates whether the Campaign should be automatically renewed",
+            "default": true,
+            "example": true
+          },
+          "optin_keywords": {
+            "type": "string",
+            "description": "Comma-separated list of OPT-IN keywords (max 255 chars)",
+            "maxLength": 255,
+            "example": "start,optin"
+          },
+          "help_keywords": {
+            "type": "string",
+            "description": "Comma-separated list of HELP keywords (max 255 chars, defaults to \"HELP\")",
+            "maxLength": 255,
+            "default": "HELP",
+            "example": "FAQ,assist"
+          },
+          "optout_keywords": {
+            "type": "string",
+            "description": "Comma-separated list of OPT-OUT keywords (max 255 chars)",
+            "maxLength": 255,
+            "example": "optout,discard"
           },
           "terms_conditions": {
             "type": "string",
-            "description": "A link to the Campaign terms and conditions",
-            "example": "https://site.com/terms-and-conditions"
+            "description": "Link to the Campaign terms and conditions (max 255 chars)",
+            "maxLength": 255,
+            "example": "Plz visit https://test-test-test.test"
+          },
+          "privacy_policy": {
+            "type": "string",
+            "description": "Link to the Campaign privacy policy (max 255 chars)",
+            "maxLength": 255,
+            "example": "PROFESSIONAL"
+          },
+          "embedded_link_sample": {
+            "type": "string",
+            "description": "Example of an embedded link (max 255 chars)",
+            "maxLength": 255,
+            "example": "https://test-test-test.test"
           }
         },
-        "description": "",
         "example": {
-          "affiliate_marketing": false,
-          "age_gated": false,
-          "auto_renewal": false,
-          "description": "Our campaign aims to …",
-          "direct_lending": false,
-          "embedded_link_sample": null,
+          "name": "UPDATED TEST ORG CAMPAIGN",
+          "usecase": "MARKETING",
+          "description": "UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN",
           "embedded_links": false,
           "embedded_phones": false,
-          "help_keywords": "help",
-          "help_message": "For help, please visit www.site.com. To opt-out, reply STOP.",
-          "name": "My first campaign",
-          "optin_keywords": "begin,start",
-          "optin_message": "You are now opted-in for help please reply HELP, to stop please reply STOP",
-          "optin_workflow": "Our SMS ...",
-          "optout_keywords": "stop,quit,unsubscribe",
-          "optout_message": "You are now opted out and will receive no further messages",
-          "privacy_policy": "https://site.com/privacy-policy",
-          "sample1": "Your verification code is XXXXXX",
-          "sample2": "XXXX is your verification code",
-          "sample3": null,
-          "sample4": null,
-          "sample5": null,
-          "terms_conditions": "https://site.com/terms-and-conditions"
+          "age_gated": false,
+          "direct_lending": false,
+          "optin": true,
+          "optout": true,
+          "help": true,
+          "sample1": "TEST ORG CAMPAIGN SAMPLE 1 TEST ORG CAMPAIGN SAMPLE 1",
+          "sample2": "TEST ORG CAMPAIGN SAMPLE 2 TEST ORG CAMPAIGN SAMPLE 2",
+          "sample3": "TEST ORG CAMPAIGN SAMPLE 3 TEST ORG CAMPAIGN SAMPLE 3",
+          "sample4": "TEST ORG CAMPAIGN SAMPLE 4 TEST ORG CAMPAIGN SAMPLE 4",
+          "sample5": "TEST ORG CAMPAIGN SAMPLE 5 TEST ORG CAMPAIGN SAMPLE 5",
+          "optin_workflow": "UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN.",
+          "help_message": "UPDATED TEST ORG CAMPAIGN optin message. For help visit https://test-test-test.test@crsrr.com",
+          "auto_renewal": true,
+          "optin_keywords": "start,optin",
+          "help_keywords": "FAQ,assist",
+          "optout_keywords": "optout,discard",
+          "optin_message": "TEST ORG CAMPAIGN optin message. You are now opted IN! Enjoy our test platform",
+          "optout_message": "TEST ORG CAMPAIGN optin message. You are now opted OUT! Enjoy our test platform",
+          "terms_conditions": "Plz visit https://test-test-test.test",
+          "privacy_policy": "PROFESSIONAL",
+          "embedded_link_sample": "https://test-test-test.test"
         }
       },
       "10DLCeventssubscription": {
@@ -19376,7 +19535,6 @@
           },
           "payload": {
             "type": "object",
-            "additionalProperties": false,
             "description": "Arbitrary data to be associated with the token",
             "nullable": true,
             "example": {}
@@ -19416,7 +19574,6 @@
           },
           "payload": {
             "type": "object",
-            "additionalProperties": false,
             "description": "Arbitrary data associated with the token",
             "nullable": true,
             "example": {}
@@ -19450,7 +19607,6 @@
           },
           "payload": {
             "type": "object",
-            "additionalProperties": false,
             "description": "Arbitrary data associated with the token",
             "nullable": true,
             "example": {}
@@ -19473,7 +19629,6 @@
         "properties": {
           "payload": {
             "type": "object",
-            "additionalProperties": false,
             "description": "Arbitrary data to be associated with the token",
             "example": {}
           }
