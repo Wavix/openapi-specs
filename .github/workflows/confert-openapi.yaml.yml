@@ -1,9 +1,10 @@
 name: Convert OpenAPI YAML to JSON
 
 on:
-  push:
+  pull_request:
     paths:
       - "docs/wavix-api.yaml"
+
 permissions:
   contents: write
 
