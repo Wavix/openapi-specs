@@ -936,9 +936,7 @@ paths:
       parameters:
         - name: ids
           in: query
-          description: >
-              An array of phone number IDs to release from your account.
-              **Either `dids` or `ids` must be provided (one is required).**
+          description: An array of phone number IDs to release from your account
           required: false
           schema:
             type: array
@@ -949,10 +947,7 @@ paths:
           explode: true
         - name: dids
           in: query
-          description: >
-            A comma-separated string of phone numbers to release from your account
-            (e.g., "47832123321,47832123324,47832123325").
-            **Either `dids` or `ids` must be provided (one is required).**
+          description: A comma-separated string of phone numbers to release from your account (e.g., "47832123321,47832123324,47832123325")
           required: false
           schema:
             type: string
@@ -12079,7 +12074,7 @@ components:
           example: PUBLIC_PROFIT
         vertical:
           type: string
-          description: The segment or industry in which the business operates
+          description: The segment the business operates in
           enum: [ HEALTHCARE, PROFESSIONAL, RETAIL, TECHNOLOGY, EDUCATION, FINANCIAL, NON_PROFIT, GOVERNMENT, OTHER ]
           example: PROFESSIONAL
         ein_taxid:
@@ -12095,7 +12090,7 @@ components:
           example: US
         website:
           type: string
-          description: The website of the business (optional)
+          description: The website of the business
           maxLength: 255
           example: Tess.com
         stock_symbol:
@@ -12106,9 +12101,7 @@ components:
           example: null
         stock_exchange:
           type: string
-          description: |
-            The stock exchange code.  
-            **Required only if** `entity_type` is `PUBLIC_PROFIT`; otherwise **must be null**.
+          description: The stock exchange code. For PUBLIC_PROFIT Brands only.
           maxLength: 10
           nullable: true
           example: NASDAQ
@@ -12145,26 +12138,24 @@ components:
           example: Miami
         state_or_province:
           type: string
-          description: State or province. For the United States, use 2-character state codes.
+          description: State or province. For the United States, use 2 character codes.
           maxLength: 20
           nullable: true
           example: AL
         zip:
           type: string
-          description: The business ZIP or postal code
+          description: The business zip or postal code
           maxLength: 10
           example: '12345'
         country:
           type: string
-          description: 2-letter ISO country code of the business address
+          description: 2-letter ISO country code the business address
           minLength: 2
           maxLength: 2
           example: US
         mock:
           type: boolean
-          description: |
-            Indicates a mock Brand.  
-            Mock Brands are for testing only — **production traffic with mock Brands is prohibited**.
+          description: Indicates a mock Brand. You can create mock Brands for testing purposes only, production traffic with the mock Brands is prohibited.
           default: false
           example: false
       oneOf:
@@ -12407,7 +12398,7 @@ components:
       title: 10DLCBrandupdaterequest
       type: object
       additionalProperties: false
-      description: A request to update a 10DLC Brand details.
+      description: A request to update a 10DLC Brand details
       properties:
         dba_name:
           type: string
@@ -12426,7 +12417,7 @@ components:
           example: PRIVATE_PROFIT
         vertical:
           type: string
-          description: The segment or industry the business operates in
+          description: The segment the business operates in
           enum: [ HEALTHCARE, PROFESSIONAL, RETAIL, TECHNOLOGY, EDUCATION, FINANCIAL, NON_PROFIT, GOVERNMENT, OTHER ]
           example: HEALTHCARE
         ein_taxid:
@@ -12453,9 +12444,7 @@ components:
           example: null
         stock_exchange:
           type: string
-          description: |
-            The stock exchange code.  
-            **Required only if** `entity_type` is `PUBLIC_PROFIT`; otherwise **must be null**.
+          description: The stock exchange code. For PUBLIC_PROFIT Brands only.
           maxLength: 10
           nullable: true
           example: null
@@ -12492,18 +12481,18 @@ components:
           example: Miami
         state_or_province:
           type: string
-          description: State or province. For the United States, use 2-letter state codes.
+          description: State or province. For the United States, use 2 character codes.
           maxLength: 20
           nullable: true
           example: FL
         zip:
           type: string
-          description: The business ZIP or postal code
+          description: The business zip or postal code
           maxLength: 10
           example: '12346'
         country:
           type: string
-          description: 2-letter ISO country code for the business address
+          description: 2-letter ISO country code the business address
           minLength: 2
           maxLength: 2
           example: US
@@ -12784,7 +12773,7 @@ components:
         reasons:
           type: array
           nullable: true
-          description: List of reasons
+          description: Reason
           items:
             type: string
           example: 'Company size as reported by government or business sources resulted in a score deduction: size range 6-10'
@@ -13648,7 +13637,7 @@ components:
       properties:
         name:
           type: string
-          description: A user-defined Campaign name (max 120 characters)
+          description: A user-defined Campaign name
           maxLength: 120
           example: Campaign
         usecase:
@@ -13658,7 +13647,7 @@ components:
           example: MARKETING
         description:
           type: string
-          description: The Campaign description (min 40, max 4096 characters)
+          description: The Campaign description
           minLength: 40
           maxLength: 4096
           example: The Campaign description
@@ -13699,31 +13688,31 @@ components:
           example: true
         sample1:
           type: string
-          description: Message sample (min 20, max 1024 characters)
+          description: Message sample
           minLength: 20
           maxLength: 1024
           example: Example of message sample for campaign 1
         sample2:
           type: string
-          description: Message sample (min 20, max 1024 characters)
+          description: Message sample
           minLength: 20
           maxLength: 1024
           example: Example of message sample for campaign 2
         sample3:
           type: string
-          description: Message sample (min 20, max 1024 characters)
+          description: Message sample
           minLength: 20
           maxLength: 1024
           example: Example of message sample for campaign 3
         sample4:
           type: string
-          description: Message sample (min 20, max 1024 characters)
+          description: Message sample
           minLength: 20
           maxLength: 1024
           example: Example of message sample for campaign 4
         sample5:
           type: string
-          description: Message sample (min 20, max 1024 characters)
+          description: Message sample
           minLength: 20
           maxLength: 1024
           example: Example of message sample for campaign 5
@@ -13741,13 +13730,13 @@ components:
           example: For help, please visit www.site.com. To opt out, reply STOP.
         optin_message:
           type: string
-          description: A comma-separated list of OPT-IN keywords. The OPT-IN keywords are case-insensitive.
+          description: An acknowledgement to be sent when an OPT-IN keyword is received
           example: begin,start
           minLength: 20
           maxLength: 320
         optout_message:
           type: string
-          description: Message sent when a user opts out (required if `optout` is true)
+          description: An acknowledgement to be sent when an OPT-OUT keyword is received
           minLength: 20
           maxLength: 320
           example: A comma-separated list of OPT-OUT keywords. The OPT-OUT keywords are case-insensitive.
@@ -13758,33 +13747,33 @@ components:
           example: true
         optin_keywords:
           type: string
-          description: Comma-separated list of OPT-IN keywords (max 255 chars)
+          description: A comma-separated list of OPT-IN keywords. The OPT-IN keywords are case-insensitive.
           maxLength: 255
           example: start,optin
         help_keywords:
           type: string
-          description: Comma-separated list of HELP keywords (max 255 chars, defaults to "HELP")
+          description: A comma-separated list of HELP keywords. The HELP keywords are case-insensitive.
           maxLength: 255
           default: HELP
           example: help
         optout_keywords:
           type: string
-          description: Comma-separated list of OPT-OUT keywords (max 255 chars)
+          description: A comma-separated list of OPT-OUT keywords. The OPT-OUT keywords are case-insensitive.
           maxLength: 255
           example: optout,discard
         terms_conditions:
           type: string
-          description: Link to the Campaign terms and conditions (max 255 chars)
+          description: A link to the Campaign terms and conditions
           maxLength: 255
           example: https://site.com/terms-and-conditions
         privacy_policy:
           type: string
-          description: Link to the Campaign privacy policy (max 255 chars)
+          description: A link to the Campaign privacy policy
           maxLength: 255
           example: PROFESSIONAL
         embedded_link_sample:
           type: string
-          description: Example of an embedded link (max 255 chars)
+          description: An embedded link sample
           maxLength: 255
           example: https://example.com
     10DLCeventssubscription:
