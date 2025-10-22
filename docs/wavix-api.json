@@ -1428,9 +1428,9 @@
                 "type": "integer"
               },
               "example": [
-                123,
-                456,
-                789
+                47832123321,
+                47832123324,
+                478321233215
               ]
             },
             "style": "form",
@@ -1439,7 +1439,7 @@
           {
             "name": "dids",
             "in": "query",
-            "description": "A comma-separated string of phone numbers to release from your account (e.g., \"123,456,789\")",
+            "description": "A comma-separated string of phone numbers to release from your account (e.g., \"47832123321,47832123324,478321233215\")",
             "required": false,
             "schema": {
               "type": "string",
@@ -5235,7 +5235,7 @@
         },
         "responses": {
           "201": {
-            "description": "Successful message submission response",
+            "description": "The message successfully submitted.",
             "headers": {},
             "content": {
               "application/json": {
@@ -5255,7 +5255,7 @@
                     },
                     "direction": {
                       "type": "string",
-                      "description": "Direction of sms",
+                      "description": "Message direction. Can be either inbound or outbound.",
                       "example": "outbound"
                     },
                     "delivered_at": {
@@ -5267,13 +5267,13 @@
                     "error_message": {
                       "type": "string",
                       "nullable": true,
-                      "description": "Error message if the message failed",
+                      "description": "Error message, if any.",
                       "example": null
                     },
                     "from": {
                       "type": "string",
                       "description": "Sender of the message",
-                      "example": "TestSender"
+                      "example": "Sender"
                     },
                     "mcc": {
                       "type": "string",
@@ -5352,7 +5352,7 @@
                   "charge": "0.0",
                   "delivered_at": null,
                   "error_message": null,
-                  "from": "TestSender",
+                  "from": "Sender",
                   "mcc": "310",
                   "mnc": "260",
                   "message_body": {
@@ -5805,7 +5805,7 @@
               "application/x-ndjson": {
                 "schema": {
                   "type": "string",
-                  "description": "Stream of newline-delimited JSON objects (NDJSON).\nEach line is a valid JSON object.\n",
+                  "description": "Newline-delimited JSON stream of message objects",
                   "example": "{\"message_id\":\"3a525ca2-6909-4c72-9399-905adf7f3a74\",\"message_type\":\"sms\",\"from\":\"15072429497\",\"to\":\"16419252149\",\"direction\":\"outbound\",\"status\":\"delivered\"}\n{\"message_id\":\"4b636ca3-7900-5d83-a400-016bf8f8f4b85\",\"message_type\":\"sms\",\"from\":\"15072429497\",\"to\":\"16419252150\",\"direction\":\"outbound\",\"status\":\"delivered\"}\n"
                 }
               }
@@ -10470,537 +10470,6 @@
         "deprecated": false
       }
     },
-    "/two-fa/service": {
-      "get": {
-        "summary": "Get service list",
-        "tags": [
-          "2FA"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "search",
-            "schema": {
-              "type": "string",
-              "description": "Filter by service name"
-            }
-          },
-          {
-            "in": "query",
-            "name": "channel",
-            "schema": {
-              "type": "string",
-              "description": "Filter by service channel"
-            }
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "schema": {
-              "type": "string",
-              "description": "Current page"
-            }
-          },
-          {
-            "in": "query",
-            "name": "per_page",
-            "schema": {
-              "type": "string",
-              "description": "Maximum number of elements on page"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer",
-                      "description": "Service id"
-                    },
-                    "uuid": {
-                      "type": "string",
-                      "description": "Service uuid"
-                    },
-                    "name": {
-                      "type": "string",
-                      "description": "Service name"
-                    },
-                    "validation_enabled": {
-                      "type": "boolean",
-                      "description": "Service lokup enabled"
-                    },
-                    "failover_enabled": {
-                      "type": "boolean",
-                      "description": "Service failover enabled"
-                    },
-                    "code_length": {
-                      "type": "integer",
-                      "description": "Service code length"
-                    },
-                    "senderid": {
-                      "type": "string",
-                      "description": "Service sender id"
-                    },
-                    "callerid": {
-                      "type": "string",
-                      "description": "Service caller id"
-                    },
-                    "with_shared_sender": {
-                      "type": "boolean",
-                      "description": "Use shared sender for SMS delivery"
-                    },
-                    "created_at": {
-                      "type": "string",
-                      "description": "Service created date"
-                    }
-                  }
-                },
-                "example": {
-                  "pagination": {
-                    "limit": 25,
-                    "total": 2,
-                    "current_page": 1,
-                    "total_pages": 1
-                  },
-                  "items": [
-                    {
-                      "id": 2,
-                      "uuid": "eeddca80-1e7e-11ef-871f-b5f648545118",
-                      "name": "test",
-                      "callerid": "88923579854",
-                      "senderid": "523",
-                      "validation_enabled": false,
-                      "failover_enabled": false,
-                      "code_length": 4,
-                      "with_shared_sender": false,
-                      "created_at": "2024-05-30T12:19:59.000Z"
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Create 2FA service",
-        "tags": [
-          "2FA"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "uuid": {
-                    "type": "string",
-                    "description": "Service uuid"
-                  },
-                  "name": {
-                    "type": "string",
-                    "description": "Service name"
-                  },
-                  "validation_enabled": {
-                    "type": "boolean",
-                    "description": "Service lokup enabled"
-                  },
-                  "failover_enabled": {
-                    "type": "boolean",
-                    "description": "Service failover enabled"
-                  },
-                  "code_length": {
-                    "type": "integer",
-                    "description": "Service code length"
-                  },
-                  "senderid": {
-                    "type": "string",
-                    "description": "Service sender id"
-                  },
-                  "callerid": {
-                    "type": "string",
-                    "description": "Service caller id"
-                  },
-                  "with_shared_sender": {
-                    "type": "boolean",
-                    "description": "Use shared sender for SMS delivery"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "description": "Updated service",
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer",
-                      "description": "Service id"
-                    },
-                    "uuid": {
-                      "type": "string",
-                      "description": "Service uuid"
-                    },
-                    "user_id": {
-                      "type": "integer",
-                      "description": "ID of the user who owns the service"
-                    },
-                    "name": {
-                      "type": "string",
-                      "description": "Service name"
-                    },
-                    "validation_enabled": {
-                      "type": "boolean",
-                      "description": "Service lokup enabled"
-                    },
-                    "code_length": {
-                      "type": "integer",
-                      "description": "Service code length"
-                    },
-                    "senderid": {
-                      "type": "string",
-                      "description": "Service sender id"
-                    },
-                    "callerid": {
-                      "type": "string",
-                      "description": "Service caller id"
-                    },
-                    "failover_enabled": {
-                      "type": "boolean",
-                      "description": "Service failover enabled"
-                    },
-                    "is_deleted": {
-                      "type": "boolean",
-                      "description": "Flag indicating whether the service has been deleted"
-                    },
-                    "trunk_name": {
-                      "type": "string",
-                      "description": "Service trunk name"
-                    },
-                    "with_shared_sender": {
-                      "type": "boolean",
-                      "description": "Use shared sender for SMS delivery"
-                    },
-                    "created_at": {
-                      "type": "string",
-                      "description": "Service created date"
-                    },
-                    "updated_at": {
-                      "type": "string",
-                      "description": "Service last update date"
-                    }
-                  }
-                },
-                "example": {
-                  "id": 5,
-                  "uuid": "5475f7d0-1e7c-11ef-9489-8f650efdd1e0",
-                  "user_id": 5,
-                  "name": "Test 3",
-                  "code_length": 4,
-                  "validation_enabled": false,
-                  "failover_enabled": false,
-                  "is_deleted": false,
-                  "senderid": "523",
-                  "callerid": "88923579854",
-                  "trunk_name": "32631",
-                  "with_shared_sender": false,
-                  "created_at": "2024-05-30T12:01:21.000Z",
-                  "updated_at": "2024-05-30T12:01:21.385Z"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/two-fa-service/{service_uuid}": {
-      "get": {
-        "summary": "Get service by uuid",
-        "tags": [
-          "2FA"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "serviceUuid",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Service UUID"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "description": "",
-                  "type": "object",
-                  "properties": {
-                    "service_id": {
-                      "type": "string",
-                      "description": "Service uuid"
-                    },
-                    "service_name": {
-                      "type": "string",
-                      "description": "Service name"
-                    },
-                    "lookup_enabled": {
-                      "type": "boolean",
-                      "description": "Lookup enabled"
-                    },
-                    "failover_enabled": {
-                      "type": "boolean",
-                      "description": "Failover enabled"
-                    },
-                    "sms": {
-                      "type": "object",
-                      "properties": {
-                        "enabled": {
-                          "type": "boolean",
-                          "description": "Sms channel enabled"
-                        },
-                        "sender_id": {
-                          "type": "string",
-                          "description": "Sender id"
-                        }
-                      }
-                    },
-                    "voice": {
-                      "type": "object",
-                      "properties": {
-                        "enabled": {
-                          "type": "boolean",
-                          "description": "Voice channel enabled"
-                        },
-                        "sender_id": {
-                          "type": "string",
-                          "description": "Caller id"
-                        }
-                      }
-                    }
-                  },
-                  "required": [
-                    "service_id",
-                    "service_name",
-                    "lookup_enabled",
-                    "failover_enabled",
-                    "sms",
-                    "voice"
-                  ]
-                },
-                "example": {
-                  "service_id": "4532kjg4343bk6436bkj34213113",
-                  "service_name": "Test",
-                  "lookup_enabled": true,
-                  "failover_enabled": true,
-                  "sms": {
-                    "enabled": true,
-                    "sender_id": "test"
-                  },
-                  "voice": {
-                    "enabled": true,
-                    "caller_id": "4534675754"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "patch": {
-        "summary": "Patch 2FA service",
-        "tags": [
-          "2FA"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "serviceUuid",
-            "schema": {
-              "type": "string"
-            },
-            "description": "2FA service UUID",
-            "required": true
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "Service name"
-                  },
-                  "validation_enabled": {
-                    "type": "boolean",
-                    "description": "Service lokup enabled"
-                  },
-                  "failover_enabled": {
-                    "type": "boolean",
-                    "description": "Service failover enabled"
-                  },
-                  "code_length": {
-                    "type": "integer",
-                    "description": "Service code length"
-                  },
-                  "senderid": {
-                    "type": "string",
-                    "description": "Service sender id"
-                  },
-                  "callerid": {
-                    "type": "string",
-                    "description": "Service caller id"
-                  },
-                  "with_shared_sender": {
-                    "type": "boolean",
-                    "description": "Use shared sender for SMS delivery"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "description": "Updated service",
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer",
-                      "description": "Service id"
-                    },
-                    "uuid": {
-                      "type": "string",
-                      "description": "Service uuid"
-                    },
-                    "user_id": {
-                      "type": "integer",
-                      "description": "ID of the user who owns the service"
-                    },
-                    "name": {
-                      "type": "string",
-                      "description": "Service name"
-                    },
-                    "validation_enabled": {
-                      "type": "boolean",
-                      "description": "Service lokup enabled"
-                    },
-                    "code_length": {
-                      "type": "integer",
-                      "description": "Service code length"
-                    },
-                    "senderid": {
-                      "type": "string",
-                      "description": "Service sender id"
-                    },
-                    "callerid": {
-                      "type": "string",
-                      "description": "Service caller id"
-                    },
-                    "failover_enabled": {
-                      "type": "boolean",
-                      "description": "Service failover enabled"
-                    },
-                    "is_deleted": {
-                      "type": "boolean",
-                      "description": "Flag indicating whether the service has been deleted"
-                    },
-                    "trunk_name": {
-                      "type": "string",
-                      "description": "Service trunk name"
-                    },
-                    "with_shared_sender": {
-                      "type": "boolean",
-                      "description": "Use shared sender for SMS delivery"
-                    },
-                    "created_at": {
-                      "type": "string",
-                      "description": "Service created date"
-                    },
-                    "updated_at": {
-                      "type": "string",
-                      "description": "Service last update date"
-                    }
-                  }
-                },
-                "example": {
-                  "id": 5,
-                  "uuid": "5475f7d0-1e7c-11ef-9489-8f650efdd1e0",
-                  "user_id": 5,
-                  "name": "Test 3",
-                  "code_length": 4,
-                  "validation_enabled": false,
-                  "failover_enabled": false,
-                  "is_deleted": false,
-                  "senderid": "523",
-                  "callerid": "88923579854",
-                  "trunk_name": "32631",
-                  "with_shared_sender": false,
-                  "created_at": "2024-05-30T12:01:21.000Z",
-                  "updated_at": "2024-05-30T12:01:21.385Z"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete 2FA service",
-        "tags": [
-          "2FA"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "serviceUuid",
-            "schema": {
-              "type": "string"
-            },
-            "description": "2FA service UUID",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "description": "",
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "description": "Operation success status"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/two-fa/service/{service_uuid}/sessions": {
       "get": {
         "tags": [
@@ -12058,7 +11527,7 @@
                     "type": "string",
                     "description": "Company name",
                     "maxLength": 255,
-                    "example": "Test Company"
+                    "example": "Company name"
                   },
                   "default_destinations": {
                     "type": "object",
@@ -12081,7 +11550,7 @@
                   }
                 },
                 "example": {
-                  "name": "Test Company",
+                  "name": "Company",
                   "default_destinations": {
                     "sms_endpoint": "https://examples.com/sms",
                     "dlr_endpoint": "https://examples.com/dlr"
@@ -17350,15 +16819,15 @@
         "properties": {
           "dba_name": {
             "type": "string",
-            "description": "Brand name or DBA (Doing Business As)",
+            "description": "Brand name or DBA",
             "maxLength": 255,
-            "example": "111 RANDOM ORG TEST"
+            "example": "Brand"
           },
           "company_name": {
             "type": "string",
             "description": "Legal name of the company",
             "maxLength": 255,
-            "example": "111 RANDOM ORG TEST"
+            "example": "Company"
           },
           "entity_type": {
             "type": "string",
@@ -17389,7 +16858,7 @@
           },
           "ein_taxid": {
             "type": "string",
-            "description": "IRS Employee Identification Number (EIN) for US-based or foreign companies with EIN.  \nFor non-US entities, provide the numeric portion of the local Tax ID.\n",
+            "description": "IRS Employee Identification Number (EIN) for US-based or foreign companies with EIN. The numeric portion of Tax ID for companies incorporated in other countries.",
             "maxLength": 21,
             "example": "12-2142342"
           },
@@ -17408,10 +16877,10 @@
           },
           "stock_symbol": {
             "type": "string",
-            "description": "The stock symbol of the Brand.  \n**Required only if** `entity_type` is `PUBLIC_PROFIT`; otherwise **must be null**.\n",
+            "description": "The stock symbol of the Brand. For PUBLIC_PROFIT Brands only.",
             "maxLength": 10,
             "nullable": true,
-            "example": "TEST"
+            "example": null
           },
           "stock_exchange": {
             "type": "string",
@@ -17424,13 +16893,13 @@
             "type": "string",
             "description": "The first name of the business contact",
             "maxLength": 100,
-            "example": "Test 1"
+            "example": "John"
           },
           "last_name": {
             "type": "string",
             "description": "The last name of the business contact",
             "maxLength": 100,
-            "example": "Test1"
+            "example": "Dow"
           },
           "phone_number": {
             "type": "string",
@@ -17443,7 +16912,7 @@
             "description": "The email address of the support contact",
             "format": "email",
             "maxLength": 100,
-            "example": "Test@crsrr.com"
+            "example": "email@brand.com"
           },
           "street_address": {
             "type": "string",
@@ -17455,7 +16924,7 @@
             "type": "string",
             "description": "The city name",
             "maxLength": 100,
-            "example": "Test"
+            "example": "Miami"
           },
           "state_or_province": {
             "type": "string",
@@ -17517,21 +16986,21 @@
           }
         ],
         "example": {
-          "dba_name": "111 RANDOM ORG TEST",
-          "company_name": "111 RANDOM ORG TEST",
+          "dba_name": "Brand",
+          "company_name": "Company",
           "entity_type": "PUBLIC_PROFIT",
           "vertical": "PROFESSIONAL",
           "ein_taxid": "12-2142342",
           "ein_taxid_country": "US",
           "website": "Tess.com",
-          "stock_symbol": "TEST",
+          "stock_symbol": null,
           "stock_exchange": "NASDAQ",
-          "first_name": "Test 1",
-          "last_name": "Test1",
+          "first_name": "John",
+          "last_name": "Doe",
           "phone_number": "12046661776",
-          "email": "Test@crsrr.com",
-          "street_address": "123 rtst",
-          "city": "Test",
+          "email": "email@brand.com",
+          "street_address": "10, Street name",
+          "city": "Miami",
           "state_or_province": "AL",
           "zip": "12345",
           "country": "US",
@@ -17720,7 +17189,7 @@
           "status": "VERIFIED",
           "stock_exchange": null,
           "stock_symbol": null,
-          "street_address": "test",
+          "street_address": "10, Street name",
           "updated_at": "2024-07-24T08:29:09",
           "vertical": "HEALTHCARE",
           "website": "https://brand.com",
@@ -17777,7 +17246,7 @@
               "status": "VERIFIED",
               "stock_exchange": null,
               "stock_symbol": null,
-              "street_address": "test",
+              "street_address": "10, Street name",
               "updated_at": "2024-07-24T08:29:09",
               "vertical": "HEALTHCARE",
               "website": "https://brand.com",
@@ -17800,7 +17269,7 @@
         "properties": {
           "dba_name": {
             "type": "string",
-            "description": "Brand name or DBA (Doing Business As)",
+            "description": "Brand name or DBA",
             "maxLength": 255,
             "example": "Brand"
           },
@@ -17839,7 +17308,7 @@
           },
           "ein_taxid": {
             "type": "string",
-            "description": "IRS Employee Identification Number (EIN) for US-based or foreign companies with EIN.  \nFor companies in other countries, provide the numeric portion of the Tax ID.\n",
+            "description": "IRS Employee Identification Number (EIN) for US-based or foreign companies with EIN. The numeric portion of Tax ID for companies incorporated in other countries.",
             "maxLength": 21,
             "example": "999999999"
           },
@@ -17858,17 +17327,17 @@
           },
           "stock_symbol": {
             "type": "string",
-            "description": "The stock symbol of the Brand.  \n**Required only if** `entity_type` is `PUBLIC_PROFIT`; otherwise **must be null**.\n",
+            "description": "The stock symbol of the Brand. For PUBLIC_PROFIT Brands only.",
             "maxLength": 10,
             "nullable": true,
-            "example": "TEST"
+            "example": null
           },
           "stock_exchange": {
             "type": "string",
             "description": "The stock exchange code.  \n**Required only if** `entity_type` is `PUBLIC_PROFIT`; otherwise **must be null**.\n",
             "maxLength": 10,
             "nullable": true,
-            "example": "test"
+            "example": null
           },
           "first_name": {
             "type": "string",
@@ -19365,7 +18834,7 @@
             "type": "string",
             "description": "A user-defined Campaign name (max 120 characters)",
             "maxLength": 120,
-            "example": "UPDATED TEST ORG CAMPAIGN"
+            "example": "Campaign"
           },
           "usecase": {
             "type": "string",
@@ -19385,7 +18854,7 @@
             "description": "The Campaign description (min 40, max 4096 characters)",
             "minLength": 40,
             "maxLength": 4096,
-            "example": "UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN"
+            "example": "The Campaign description"
           },
           "embedded_links": {
             "type": "boolean",
@@ -19434,63 +18903,63 @@
             "description": "Message sample (min 20, max 1024 characters)",
             "minLength": 20,
             "maxLength": 1024,
-            "example": "TEST ORG CAMPAIGN SAMPLE 1 TEST ORG CAMPAIGN SAMPLE 1"
+            "example": "Example of message sample for campaign 1"
           },
           "sample2": {
             "type": "string",
             "description": "Message sample (min 20, max 1024 characters)",
             "minLength": 20,
             "maxLength": 1024,
-            "example": "TEST ORG CAMPAIGN SAMPLE 2 TEST ORG CAMPAIGN SAMPLE 2"
+            "example": "Example of message sample for campaign 2"
           },
           "sample3": {
             "type": "string",
             "description": "Message sample (min 20, max 1024 characters)",
             "minLength": 20,
             "maxLength": 1024,
-            "example": "TEST ORG CAMPAIGN SAMPLE 3 TEST ORG CAMPAIGN SAMPLE 3"
+            "example": "Example of message sample for campaign 3"
           },
           "sample4": {
             "type": "string",
             "description": "Message sample (min 20, max 1024 characters)",
             "minLength": 20,
             "maxLength": 1024,
-            "example": "TEST ORG CAMPAIGN SAMPLE 4 TEST ORG CAMPAIGN SAMPLE 4"
+            "example": "Example of message sample for campaign 4"
           },
           "sample5": {
             "type": "string",
             "description": "Message sample (min 20, max 1024 characters)",
             "minLength": 20,
             "maxLength": 1024,
-            "example": "TEST ORG CAMPAIGN SAMPLE 5 TEST ORG CAMPAIGN SAMPLE 5"
+            "example": "Example of message sample for campaign 5"
           },
           "optin_workflow": {
             "type": "string",
-            "description": "The opt-in workflow description (min 40, max 4096 characters)",
+            "description": "The opt-in workflow - the process through which consumers opt-in to the Campaign",
             "minLength": 40,
             "maxLength": 4096,
-            "example": "UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN."
+            "example": "Our SMS ..."
           },
           "help_message": {
             "type": "string",
-            "description": "Message sent in response to HELP keyword (required if `help` is true)",
+            "description": "An acknowledgement to be sent when a HELP keyword is received",
             "minLength": 20,
             "maxLength": 320,
-            "example": "UPDATED TEST ORG CAMPAIGN optin message. For help visit https://test-test-test.test@crsrr.com"
+            "example": "For help, please visit www.site.com. To opt out, reply STOP."
           },
           "optin_message": {
             "type": "string",
-            "description": "Message sent when a user opts in (required if `optin` is true)",
+            "description": "A comma-separated list of OPT-IN keywords. The OPT-IN keywords are case-insensitive.",
+            "example": "begin,start",
             "minLength": 20,
-            "maxLength": 320,
-            "example": "TEST ORG CAMPAIGN optin message. You are now opted IN! Enjoy our test platform"
+            "maxLength": 320
           },
           "optout_message": {
             "type": "string",
             "description": "Message sent when a user opts out (required if `optout` is true)",
             "minLength": 20,
             "maxLength": 320,
-            "example": "TEST ORG CAMPAIGN optin message. You are now opted OUT! Enjoy our test platform"
+            "example": "A comma-separated list of OPT-OUT keywords. The OPT-OUT keywords are case-insensitive."
           },
           "auto_renewal": {
             "type": "boolean",
@@ -19509,7 +18978,7 @@
             "description": "Comma-separated list of HELP keywords (max 255 chars, defaults to \"HELP\")",
             "maxLength": 255,
             "default": "HELP",
-            "example": "FAQ,assist"
+            "example": "help"
           },
           "optout_keywords": {
             "type": "string",
@@ -19521,7 +18990,7 @@
             "type": "string",
             "description": "Link to the Campaign terms and conditions (max 255 chars)",
             "maxLength": 255,
-            "example": "Plz visit https://test-test-test.test"
+            "example": "https://site.com/terms-and-conditions"
           },
           "privacy_policy": {
             "type": "string",
@@ -19533,36 +19002,8 @@
             "type": "string",
             "description": "Example of an embedded link (max 255 chars)",
             "maxLength": 255,
-            "example": "https://test-test-test.test"
+            "example": "https://example.com"
           }
-        },
-        "example": {
-          "name": "UPDATED TEST ORG CAMPAIGN",
-          "usecase": "MARKETING",
-          "description": "UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN",
-          "embedded_links": false,
-          "embedded_phones": false,
-          "age_gated": false,
-          "direct_lending": false,
-          "optin": true,
-          "optout": true,
-          "help": true,
-          "sample1": "TEST ORG CAMPAIGN SAMPLE 1 TEST ORG CAMPAIGN SAMPLE 1",
-          "sample2": "TEST ORG CAMPAIGN SAMPLE 2 TEST ORG CAMPAIGN SAMPLE 2",
-          "sample3": "TEST ORG CAMPAIGN SAMPLE 3 TEST ORG CAMPAIGN SAMPLE 3",
-          "sample4": "TEST ORG CAMPAIGN SAMPLE 4 TEST ORG CAMPAIGN SAMPLE 4",
-          "sample5": "TEST ORG CAMPAIGN SAMPLE 5 TEST ORG CAMPAIGN SAMPLE 5",
-          "optin_workflow": "UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN UPDATED TEST ORG CAMPAIGN.",
-          "help_message": "UPDATED TEST ORG CAMPAIGN optin message. For help visit https://test-test-test.test@crsrr.com",
-          "auto_renewal": true,
-          "optin_keywords": "start,optin",
-          "help_keywords": "FAQ,assist",
-          "optout_keywords": "optout,discard",
-          "optin_message": "TEST ORG CAMPAIGN optin message. You are now opted IN! Enjoy our test platform",
-          "optout_message": "TEST ORG CAMPAIGN optin message. You are now opted OUT! Enjoy our test platform",
-          "terms_conditions": "Plz visit https://test-test-test.test",
-          "privacy_policy": "PROFESSIONAL",
-          "embedded_link_sample": "https://test-test-test.test"
         }
       },
       "10DLCeventssubscription": {
@@ -19974,7 +19415,7 @@
           "name": {
             "type": "string",
             "description": "Company name",
-            "example": "Test Company"
+            "example": "Company"
           },
           "api_key": {
             "type": "string",
