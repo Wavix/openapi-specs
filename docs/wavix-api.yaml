@@ -4125,7 +4125,7 @@ paths:
                       dba_name: New Brand
                       ein_taxid: '999999999'
                       ein_taxid_country: US
-                      email: email@brand.com
+                      email: support@brand.com
                       entity_type: PRIVATE_PROFIT
                       feedback: null
                       first_name: John
@@ -4156,7 +4156,7 @@ paths:
                   dba_name: New Brand
                   ein_taxid: '999999999'
                   ein_taxid_country: US
-                  email: email@brand.com
+                  email: support@brand.com
                   entity_type: PRIVATE_PROFIT
                   feedback: null
                   first_name: John
@@ -4231,7 +4231,7 @@ paths:
                     dba_name: New Brand
                     ein_taxid: '99999999'
                     ein_taxid_country: US
-                    email: email@brand.com
+                    email: support@brand.com
                     entity_type: PRIVATE_PROFIT
                     feedback: null
                     first_name: John
@@ -4256,7 +4256,7 @@ paths:
                 dba_name: New Brand
                 ein_taxid: '99999999'
                 ein_taxid_country: US
-                email: email@brand.com
+                email: support@brand.com
                 entity_type: PRIVATE_PROFIT
                 feedback: null
                 first_name: John
@@ -4318,7 +4318,7 @@ paths:
                     dba_name: New Brand
                     ein_taxid: '99999999'
                     ein_taxid_country: US
-                    email: email@brand.com
+                    email: support@brand.com
                     entity_type: PRIVATE_PROFIT
                     feedback: null
                     first_name: John
@@ -4397,7 +4397,7 @@ paths:
                     dba_name: New Brand
                     ein_taxid: '99999999'
                     ein_taxid_country: US
-                    email: email@brand.com
+                    email: support@brand.com
                     entity_type: PRIVATE_PROFIT
                     feedback: null
                     first_name: John
@@ -4422,7 +4422,7 @@ paths:
                 dba_name: New Brand
                 ein_taxid: '99999999'
                 ein_taxid_country: US
-                email: email@brand.com
+                email: support@brand.com
                 entity_type: PRIVATE_PROFIT
                 feedback: null
                 first_name: John
@@ -12125,12 +12125,12 @@ components:
           description: The email address of the support contact
           format: email
           maxLength: 100
-          example: email@brand.com
+          example: support@brand.com
         street_address:
           type: string
           description: Street name and house number
           maxLength: 100
-          example: 123 rtst
+          example: 10, City Name
         city:
           type: string
           description: The city name
@@ -12187,7 +12187,7 @@ components:
         first_name: John
         last_name: Doe
         phone_number: '12046661776'
-        email: email@brand.com
+        email: support@brand.com
         street_address: 10, Street name
         city: Miami
         state_or_province: AL
@@ -12329,7 +12329,7 @@ components:
         dba_name: New Brand
         ein_taxid: '12345'
         ein_taxid_country: US
-        email: email@brand.com
+        email: support@brand.com
         entity_type: PRIVATE_PROFIT
         feedback: null
         first_name: John
@@ -12373,7 +12373,7 @@ components:
           dba_name: New Brand
           ein_taxid: '12345'
           ein_taxid_country: US
-          email: email@brand.com
+          email: support@brand.com
           entity_type: PRIVATE_PROFIT
           feedback: null
           first_name: John
