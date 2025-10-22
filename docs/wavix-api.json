@@ -10470,6 +10470,537 @@
         "deprecated": false
       }
     },
+    "/two-fa/service": {
+      "get": {
+        "summary": "Get service list",
+        "tags": [
+          "2FA"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string",
+              "description": "Filter by service name"
+            }
+          },
+          {
+            "in": "query",
+            "name": "channel",
+            "schema": {
+              "type": "string",
+              "description": "Filter by service channel"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "description": "Current page"
+            }
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "string",
+              "description": "Maximum number of elements on page"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "Service id"
+                    },
+                    "uuid": {
+                      "type": "string",
+                      "description": "Service uuid"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Service name"
+                    },
+                    "validation_enabled": {
+                      "type": "boolean",
+                      "description": "Service lokup enabled"
+                    },
+                    "failover_enabled": {
+                      "type": "boolean",
+                      "description": "Service failover enabled"
+                    },
+                    "code_length": {
+                      "type": "integer",
+                      "description": "Service code length"
+                    },
+                    "senderid": {
+                      "type": "string",
+                      "description": "Service sender id"
+                    },
+                    "callerid": {
+                      "type": "string",
+                      "description": "Service caller id"
+                    },
+                    "with_shared_sender": {
+                      "type": "boolean",
+                      "description": "Use shared sender for SMS delivery"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "description": "Service created date"
+                    }
+                  }
+                },
+                "example": {
+                  "pagination": {
+                    "limit": 25,
+                    "total": 2,
+                    "current_page": 1,
+                    "total_pages": 1
+                  },
+                  "items": [
+                    {
+                      "id": 2,
+                      "uuid": "eeddca80-1e7e-11ef-871f-b5f648545118",
+                      "name": "test",
+                      "callerid": "88923579854",
+                      "senderid": "523",
+                      "validation_enabled": false,
+                      "failover_enabled": false,
+                      "code_length": 4,
+                      "with_shared_sender": false,
+                      "created_at": "2024-05-30T12:19:59.000Z"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create 2FA service",
+        "tags": [
+          "2FA"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "uuid": {
+                    "type": "string",
+                    "description": "Service uuid"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Service name"
+                  },
+                  "validation_enabled": {
+                    "type": "boolean",
+                    "description": "Service lokup enabled"
+                  },
+                  "failover_enabled": {
+                    "type": "boolean",
+                    "description": "Service failover enabled"
+                  },
+                  "code_length": {
+                    "type": "integer",
+                    "description": "Service code length"
+                  },
+                  "senderid": {
+                    "type": "string",
+                    "description": "Service sender id"
+                  },
+                  "callerid": {
+                    "type": "string",
+                    "description": "Service caller id"
+                  },
+                  "with_shared_sender": {
+                    "type": "boolean",
+                    "description": "Use shared sender for SMS delivery"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Updated service",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "Service id"
+                    },
+                    "uuid": {
+                      "type": "string",
+                      "description": "Service uuid"
+                    },
+                    "user_id": {
+                      "type": "integer",
+                      "description": "ID of the user who owns the service"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Service name"
+                    },
+                    "validation_enabled": {
+                      "type": "boolean",
+                      "description": "Service lokup enabled"
+                    },
+                    "code_length": {
+                      "type": "integer",
+                      "description": "Service code length"
+                    },
+                    "senderid": {
+                      "type": "string",
+                      "description": "Service sender id"
+                    },
+                    "callerid": {
+                      "type": "string",
+                      "description": "Service caller id"
+                    },
+                    "failover_enabled": {
+                      "type": "boolean",
+                      "description": "Service failover enabled"
+                    },
+                    "is_deleted": {
+                      "type": "boolean",
+                      "description": "Flag indicating whether the service has been deleted"
+                    },
+                    "trunk_name": {
+                      "type": "string",
+                      "description": "Service trunk name"
+                    },
+                    "with_shared_sender": {
+                      "type": "boolean",
+                      "description": "Use shared sender for SMS delivery"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "description": "Service created date"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "description": "Service last update date"
+                    }
+                  }
+                },
+                "example": {
+                  "id": 5,
+                  "uuid": "5475f7d0-1e7c-11ef-9489-8f650efdd1e0",
+                  "user_id": 5,
+                  "name": "Test 3",
+                  "code_length": 4,
+                  "validation_enabled": false,
+                  "failover_enabled": false,
+                  "is_deleted": false,
+                  "senderid": "523",
+                  "callerid": "88923579854",
+                  "trunk_name": "32631",
+                  "with_shared_sender": false,
+                  "created_at": "2024-05-30T12:01:21.000Z",
+                  "updated_at": "2024-05-30T12:01:21.385Z"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/two-fa-service/{service_uuid}": {
+      "get": {
+        "summary": "Get service by uuid",
+        "tags": [
+          "2FA"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "serviceUuid",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Service UUID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "service_id": {
+                      "type": "string",
+                      "description": "Service uuid"
+                    },
+                    "service_name": {
+                      "type": "string",
+                      "description": "Service name"
+                    },
+                    "lookup_enabled": {
+                      "type": "boolean",
+                      "description": "Lookup enabled"
+                    },
+                    "failover_enabled": {
+                      "type": "boolean",
+                      "description": "Failover enabled"
+                    },
+                    "sms": {
+                      "type": "object",
+                      "properties": {
+                        "enabled": {
+                          "type": "boolean",
+                          "description": "Sms channel enabled"
+                        },
+                        "sender_id": {
+                          "type": "string",
+                          "description": "Sender id"
+                        }
+                      }
+                    },
+                    "voice": {
+                      "type": "object",
+                      "properties": {
+                        "enabled": {
+                          "type": "boolean",
+                          "description": "Voice channel enabled"
+                        },
+                        "sender_id": {
+                          "type": "string",
+                          "description": "Caller id"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "service_id",
+                    "service_name",
+                    "lookup_enabled",
+                    "failover_enabled",
+                    "sms",
+                    "voice"
+                  ]
+                },
+                "example": {
+                  "service_id": "4532kjg4343bk6436bkj34213113",
+                  "service_name": "Test",
+                  "lookup_enabled": true,
+                  "failover_enabled": true,
+                  "sms": {
+                    "enabled": true,
+                    "sender_id": "test"
+                  },
+                  "voice": {
+                    "enabled": true,
+                    "caller_id": "4534675754"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Patch 2FA service",
+        "tags": [
+          "2FA"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "serviceUuid",
+            "schema": {
+              "type": "string"
+            },
+            "description": "2FA service UUID",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Service name"
+                  },
+                  "validation_enabled": {
+                    "type": "boolean",
+                    "description": "Service lokup enabled"
+                  },
+                  "failover_enabled": {
+                    "type": "boolean",
+                    "description": "Service failover enabled"
+                  },
+                  "code_length": {
+                    "type": "integer",
+                    "description": "Service code length"
+                  },
+                  "senderid": {
+                    "type": "string",
+                    "description": "Service sender id"
+                  },
+                  "callerid": {
+                    "type": "string",
+                    "description": "Service caller id"
+                  },
+                  "with_shared_sender": {
+                    "type": "boolean",
+                    "description": "Use shared sender for SMS delivery"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Updated service",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "Service id"
+                    },
+                    "uuid": {
+                      "type": "string",
+                      "description": "Service uuid"
+                    },
+                    "user_id": {
+                      "type": "integer",
+                      "description": "ID of the user who owns the service"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Service name"
+                    },
+                    "validation_enabled": {
+                      "type": "boolean",
+                      "description": "Service lokup enabled"
+                    },
+                    "code_length": {
+                      "type": "integer",
+                      "description": "Service code length"
+                    },
+                    "senderid": {
+                      "type": "string",
+                      "description": "Service sender id"
+                    },
+                    "callerid": {
+                      "type": "string",
+                      "description": "Service caller id"
+                    },
+                    "failover_enabled": {
+                      "type": "boolean",
+                      "description": "Service failover enabled"
+                    },
+                    "is_deleted": {
+                      "type": "boolean",
+                      "description": "Flag indicating whether the service has been deleted"
+                    },
+                    "trunk_name": {
+                      "type": "string",
+                      "description": "Service trunk name"
+                    },
+                    "with_shared_sender": {
+                      "type": "boolean",
+                      "description": "Use shared sender for SMS delivery"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "description": "Service created date"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "description": "Service last update date"
+                    }
+                  }
+                },
+                "example": {
+                  "id": 5,
+                  "uuid": "5475f7d0-1e7c-11ef-9489-8f650efdd1e0",
+                  "user_id": 5,
+                  "name": "Test 3",
+                  "code_length": 4,
+                  "validation_enabled": false,
+                  "failover_enabled": false,
+                  "is_deleted": false,
+                  "senderid": "523",
+                  "callerid": "88923579854",
+                  "trunk_name": "32631",
+                  "with_shared_sender": false,
+                  "created_at": "2024-05-30T12:01:21.000Z",
+                  "updated_at": "2024-05-30T12:01:21.385Z"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete 2FA service",
+        "tags": [
+          "2FA"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "serviceUuid",
+            "schema": {
+              "type": "string"
+            },
+            "description": "2FA service UUID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Operation success status"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/two-fa/service/{service_uuid}/sessions": {
       "get": {
         "tags": [
