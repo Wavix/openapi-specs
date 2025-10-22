@@ -1420,7 +1420,7 @@
           {
             "name": "ids",
             "in": "query",
-            "description": "An array of phone number IDs to release from your account. **Either `dids` or `ids` must be provided (one is required).**\n",
+            "description": "An array of phone number IDs to release from your account",
             "required": false,
             "schema": {
               "type": "array",
@@ -1439,7 +1439,7 @@
           {
             "name": "dids",
             "in": "query",
-            "description": "A comma-separated string of phone numbers to release from your account (e.g., \"47832123321,47832123324,47832123325\"). **Either `dids` or `ids` must be provided (one is required).**\n",
+            "description": "A comma-separated string of phone numbers to release from your account (e.g., \"47832123321,47832123324,47832123325\")",
             "required": false,
             "schema": {
               "type": "string",
@@ -5993,7 +5993,7 @@
                             "dba_name": "New Brand",
                             "ein_taxid": "999999999",
                             "ein_taxid_country": "US",
-                            "email": "email@brand.com",
+                            "email": "support@brand.com",
                             "entity_type": "PRIVATE_PROFIT",
                             "feedback": null,
                             "first_name": "John",
@@ -6032,7 +6032,7 @@
                       "dba_name": "New Brand",
                       "ein_taxid": "999999999",
                       "ein_taxid_country": "US",
-                      "email": "email@brand.com",
+                      "email": "support@brand.com",
                       "entity_type": "PRIVATE_PROFIT",
                       "feedback": null,
                       "first_name": "John",
@@ -6122,7 +6122,7 @@
                         "dba_name": "New Brand",
                         "ein_taxid": "99999999",
                         "ein_taxid_country": "US",
-                        "email": "email@brand.com",
+                        "email": "support@brand.com",
                         "entity_type": "PRIVATE_PROFIT",
                         "feedback": null,
                         "first_name": "John",
@@ -6151,7 +6151,7 @@
                   "dba_name": "New Brand",
                   "ein_taxid": "99999999",
                   "ein_taxid_country": "US",
-                  "email": "email@brand.com",
+                  "email": "support@brand.com",
                   "entity_type": "PRIVATE_PROFIT",
                   "feedback": null,
                   "first_name": "John",
@@ -6236,7 +6236,7 @@
                         "dba_name": "New Brand",
                         "ein_taxid": "99999999",
                         "ein_taxid_country": "US",
-                        "email": "email@brand.com",
+                        "email": "support@brand.com",
                         "entity_type": "PRIVATE_PROFIT",
                         "feedback": null,
                         "first_name": "John",
@@ -6351,7 +6351,7 @@
                         "dba_name": "New Brand",
                         "ein_taxid": "99999999",
                         "ein_taxid_country": "US",
-                        "email": "email@brand.com",
+                        "email": "support@brand.com",
                         "entity_type": "PRIVATE_PROFIT",
                         "feedback": null,
                         "first_name": "John",
@@ -6380,7 +6380,7 @@
                   "dba_name": "New Brand",
                   "ein_taxid": "99999999",
                   "ein_taxid_country": "US",
-                  "email": "email@brand.com",
+                  "email": "support@brand.com",
                   "entity_type": "PRIVATE_PROFIT",
                   "feedback": null,
                   "first_name": "John",
@@ -16842,7 +16842,7 @@
           },
           "vertical": {
             "type": "string",
-            "description": "The segment or industry in which the business operates",
+            "description": "The segment the business operates in",
             "enum": [
               "HEALTHCARE",
               "PROFESSIONAL",
@@ -16871,7 +16871,7 @@
           },
           "website": {
             "type": "string",
-            "description": "The website of the business (optional)",
+            "description": "The website of the business",
             "maxLength": 255,
             "example": "Tess.com"
           },
@@ -16884,7 +16884,7 @@
           },
           "stock_exchange": {
             "type": "string",
-            "description": "The stock exchange code.  \n**Required only if** `entity_type` is `PUBLIC_PROFIT`; otherwise **must be null**.\n",
+            "description": "The stock exchange code. For PUBLIC_PROFIT Brands only.",
             "maxLength": 10,
             "nullable": true,
             "example": "NASDAQ"
@@ -16912,13 +16912,13 @@
             "description": "The email address of the support contact",
             "format": "email",
             "maxLength": 100,
-            "example": "email@brand.com"
+            "example": "support@brand.com"
           },
           "street_address": {
             "type": "string",
             "description": "Street name and house number",
             "maxLength": 100,
-            "example": "123 rtst"
+            "example": "10, City Name"
           },
           "city": {
             "type": "string",
@@ -16928,27 +16928,27 @@
           },
           "state_or_province": {
             "type": "string",
-            "description": "State or province. For the United States, use 2-character state codes.",
+            "description": "State or province. For the United States, use 2 character codes.",
             "maxLength": 20,
             "nullable": true,
             "example": "AL"
           },
           "zip": {
             "type": "string",
-            "description": "The business ZIP or postal code",
+            "description": "The business zip or postal code",
             "maxLength": 10,
             "example": "12345"
           },
           "country": {
             "type": "string",
-            "description": "2-letter ISO country code of the business address",
+            "description": "2-letter ISO country code the business address",
             "minLength": 2,
             "maxLength": 2,
             "example": "US"
           },
           "mock": {
             "type": "boolean",
-            "description": "Indicates a mock Brand.  \nMock Brands are for testing only — **production traffic with mock Brands is prohibited**.\n",
+            "description": "Indicates a mock Brand. You can create mock Brands for testing purposes only, production traffic with the mock Brands is prohibited.",
             "default": false,
             "example": false
           }
@@ -16998,7 +16998,7 @@
           "first_name": "John",
           "last_name": "Doe",
           "phone_number": "12046661776",
-          "email": "email@brand.com",
+          "email": "support@brand.com",
           "street_address": "10, Street name",
           "city": "Miami",
           "state_or_province": "AL",
@@ -17178,7 +17178,7 @@
           "dba_name": "New Brand",
           "ein_taxid": "12345",
           "ein_taxid_country": "US",
-          "email": "email@brand.com",
+          "email": "support@brand.com",
           "entity_type": "PRIVATE_PROFIT",
           "feedback": null,
           "first_name": "John",
@@ -17235,7 +17235,7 @@
               "dba_name": "New Brand",
               "ein_taxid": "12345",
               "ein_taxid_country": "US",
-              "email": "email@brand.com",
+              "email": "support@brand.com",
               "entity_type": "PRIVATE_PROFIT",
               "feedback": null,
               "first_name": "John",
@@ -17265,7 +17265,7 @@
         "title": "10DLCBrandupdaterequest",
         "type": "object",
         "additionalProperties": false,
-        "description": "A request to update a 10DLC Brand details.",
+        "description": "A request to update a 10DLC Brand details",
         "properties": {
           "dba_name": {
             "type": "string",
@@ -17292,7 +17292,7 @@
           },
           "vertical": {
             "type": "string",
-            "description": "The segment or industry the business operates in",
+            "description": "The segment the business operates in",
             "enum": [
               "HEALTHCARE",
               "PROFESSIONAL",
@@ -17334,7 +17334,7 @@
           },
           "stock_exchange": {
             "type": "string",
-            "description": "The stock exchange code.  \n**Required only if** `entity_type` is `PUBLIC_PROFIT`; otherwise **must be null**.\n",
+            "description": "The stock exchange code. For PUBLIC_PROFIT Brands only.",
             "maxLength": 10,
             "nullable": true,
             "example": null
@@ -17378,20 +17378,20 @@
           },
           "state_or_province": {
             "type": "string",
-            "description": "State or province. For the United States, use 2-letter state codes.",
+            "description": "State or province. For the United States, use 2 character codes.",
             "maxLength": 20,
             "nullable": true,
             "example": "FL"
           },
           "zip": {
             "type": "string",
-            "description": "The business ZIP or postal code",
+            "description": "The business zip or postal code",
             "maxLength": 10,
             "example": "12346"
           },
           "country": {
             "type": "string",
-            "description": "2-letter ISO country code for the business address",
+            "description": "2-letter ISO country code the business address",
             "minLength": 2,
             "maxLength": 2,
             "example": "US"
@@ -17764,7 +17764,7 @@
           "reasons": {
             "type": "array",
             "nullable": true,
-            "description": "List of reasons",
+            "description": "Reason",
             "items": {
               "type": "string"
             },
@@ -18832,7 +18832,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "A user-defined Campaign name (max 120 characters)",
+            "description": "A user-defined Campaign name",
             "maxLength": 120,
             "example": "Campaign"
           },
@@ -18851,7 +18851,7 @@
           },
           "description": {
             "type": "string",
-            "description": "The Campaign description (min 40, max 4096 characters)",
+            "description": "The Campaign description",
             "minLength": 40,
             "maxLength": 4096,
             "example": "The Campaign description"
@@ -18900,35 +18900,35 @@
           },
           "sample1": {
             "type": "string",
-            "description": "Message sample (min 20, max 1024 characters)",
+            "description": "Message sample",
             "minLength": 20,
             "maxLength": 1024,
             "example": "Example of message sample for campaign 1"
           },
           "sample2": {
             "type": "string",
-            "description": "Message sample (min 20, max 1024 characters)",
+            "description": "Message sample",
             "minLength": 20,
             "maxLength": 1024,
             "example": "Example of message sample for campaign 2"
           },
           "sample3": {
             "type": "string",
-            "description": "Message sample (min 20, max 1024 characters)",
+            "description": "Message sample",
             "minLength": 20,
             "maxLength": 1024,
             "example": "Example of message sample for campaign 3"
           },
           "sample4": {
             "type": "string",
-            "description": "Message sample (min 20, max 1024 characters)",
+            "description": "Message sample",
             "minLength": 20,
             "maxLength": 1024,
             "example": "Example of message sample for campaign 4"
           },
           "sample5": {
             "type": "string",
-            "description": "Message sample (min 20, max 1024 characters)",
+            "description": "Message sample",
             "minLength": 20,
             "maxLength": 1024,
             "example": "Example of message sample for campaign 5"
@@ -18949,14 +18949,14 @@
           },
           "optin_message": {
             "type": "string",
-            "description": "A comma-separated list of OPT-IN keywords. The OPT-IN keywords are case-insensitive.",
+            "description": "An acknowledgement to be sent when an OPT-IN keyword is received",
             "example": "begin,start",
             "minLength": 20,
             "maxLength": 320
           },
           "optout_message": {
             "type": "string",
-            "description": "Message sent when a user opts out (required if `optout` is true)",
+            "description": "An acknowledgement to be sent when an OPT-OUT keyword is received",
             "minLength": 20,
             "maxLength": 320,
             "example": "A comma-separated list of OPT-OUT keywords. The OPT-OUT keywords are case-insensitive."
@@ -18969,38 +18969,38 @@
           },
           "optin_keywords": {
             "type": "string",
-            "description": "Comma-separated list of OPT-IN keywords (max 255 chars)",
+            "description": "A comma-separated list of OPT-IN keywords. The OPT-IN keywords are case-insensitive.",
             "maxLength": 255,
             "example": "start,optin"
           },
           "help_keywords": {
             "type": "string",
-            "description": "Comma-separated list of HELP keywords (max 255 chars, defaults to \"HELP\")",
+            "description": "A comma-separated list of HELP keywords. The HELP keywords are case-insensitive.",
             "maxLength": 255,
             "default": "HELP",
             "example": "help"
           },
           "optout_keywords": {
             "type": "string",
-            "description": "Comma-separated list of OPT-OUT keywords (max 255 chars)",
+            "description": "A comma-separated list of OPT-OUT keywords. The OPT-OUT keywords are case-insensitive.",
             "maxLength": 255,
             "example": "optout,discard"
           },
           "terms_conditions": {
             "type": "string",
-            "description": "Link to the Campaign terms and conditions (max 255 chars)",
+            "description": "A link to the Campaign terms and conditions",
             "maxLength": 255,
             "example": "https://site.com/terms-and-conditions"
           },
           "privacy_policy": {
             "type": "string",
-            "description": "Link to the Campaign privacy policy (max 255 chars)",
+            "description": "A link to the Campaign privacy policy",
             "maxLength": 255,
             "example": "PROFESSIONAL"
           },
           "embedded_link_sample": {
             "type": "string",
-            "description": "Example of an embedded link (max 255 chars)",
+            "description": "An embedded link sample",
             "maxLength": 255,
             "example": "https://example.com"
           }
