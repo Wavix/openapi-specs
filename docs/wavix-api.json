@@ -1420,8 +1420,8 @@
           {
             "name": "ids",
             "in": "query",
-            "description": "An array of phone number IDs to release from your account",
-            "required": true,
+            "description": "An array of phone number IDs to release from your account. **Either `dids` or `ids` must be provided (one is required).**\n",
+            "required": false,
             "schema": {
               "type": "array",
               "items": {
@@ -1439,7 +1439,7 @@
           {
             "name": "dids",
             "in": "query",
-            "description": "A comma-separated string of phone numbers to release from your account (e.g., \"47832123321,47832123324,478321233215\")",
+            "description": "A comma-separated string of phone numbers to release from your account (e.g., \"47832123321,47832123324,47832123325\"). **Either `dids` or `ids` must be provided (one is required).**\n",
             "required": false,
             "schema": {
               "type": "string",
