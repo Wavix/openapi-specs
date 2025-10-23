@@ -30,6 +30,9 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
+          git fetch origin ${{ github.event.pull_request.head.ref }}
+          git checkout -B ${{ github.event.pull_request.head.ref }} origin/${{ github.event.pull_request.head.ref }}
           git add docs/wavix-api.json
           git commit -m "Auto-update wavix-api.json from wavix-api.yaml" || echo "No changes to commit"
-          git push
+          git pull --rebase origin ${{ github.event.pull_request.head.ref }}
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
