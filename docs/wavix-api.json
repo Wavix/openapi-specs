@@ -5159,9 +5159,6 @@
               }
             }
           },
-          "204": {
-            "description": null
-          },
           "400": {
             "$ref": "#/components/responses/BadRequestError"
           },

@@ -3516,8 +3516,6 @@ paths:
                     success: true
               example:
                 success: true
-        '204':
-          description:
         '400':
           $ref: '#/components/responses/BadRequestError'
         '403':
