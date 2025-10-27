@@ -228,6 +228,7 @@ paths:
       responses:
         "200":
           headers: {}
+          description: ''
           content:
             application/json:
               schema:
