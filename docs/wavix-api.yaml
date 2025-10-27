@@ -228,7 +228,7 @@ paths:
       responses:
         "200":
           headers: {}
-          description: ''
+          description: ""
           content:
             application/json:
               schema:
@@ -791,7 +791,7 @@ paths:
       operationId: CheckoutDIDnumbers
       parameters: []
       requestBody:
-        description: null
+        description: ""
         content:
           application/json:
             schema:
