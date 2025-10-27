@@ -3,6 +3,11 @@
   "info": {
     "title": "Wavix APIs",
     "description": "Wavix provides robust APIs that let you integrate voice and text messaging features directly into your app. Send text, place calls, and access detailed reports  programmatically.",
+    "termsOfService": "https://wavix.com/terms-and-conditions",
+    "license": {
+      "name": "MIT",
+      "identifier": "MIT"
+    },
     "contact": {
       "name": "Wavix",
       "url": "https://wavix.com",
@@ -5187,7 +5192,7 @@
           "SMS and MMS"
         ],
         "summary": "Send SMS or MMS message",
-        "description": "Use this method to send SMS or MMS messages. An SMS message can be sent with a numeric or alphanumeric Sender ID registered on the Wavix platform, while MMS can only be sent to U.S numbers using a 10-digit numeric or toll-free Sender ID. If the `callback_url` parameter is specified in the request, the platform automatically forwards a  [DLR report](https://wavix.com/api#/rest/webhooks/message-delivery-reports) to it once the destination phone number receives the message.\n\n\nYou can send up to 20 SMS/MMS messages to a single destination phone number per 24 hours.",
+        "description": "Send SMS or MMS messages to your users. SMS messages can use any numeric or alphanumeric Sender ID registered in Wavix. MMS messages are available for U.S. numbers only and require a 10-digit numeric or toll-free Sender ID. Specify a `callback_url` to receive delivery reports when messages reach their destination.\n**Rate limit**: You can send up to 20 messages per phone number in 24 hours.",
         "operationId": "SendSMSorMMSmessage",
         "parameters": [],
         "requestBody": {
