@@ -24,8 +24,8 @@ paths:
       tags:
         - SIP trunks
       summary: List SIP trunks on the account
-      description: Use this method to list SIP trunks on your account. By default,
-        results are paginated with 25 records per page.
+      description: Use this method to list SIP trunks on your account.
+        By default, results are paginated with 25 records per page.
       operationId: ListSIPtrunksontheaccount
       parameters:
         - name: page
@@ -104,7 +104,8 @@ paths:
       tags:
         - SIP trunks
       summary: Get a SIP trunk configuration
-      description: Use this method to get a specific SIP trunk configuration details.
+      description: Use this method to get a specific SIP trunk
+        configuration details.
       operationId: GetSIPtrunkconfiguration
       parameters:
         - name: id
@@ -140,7 +141,7 @@ paths:
       tags:
         - SIP trunks
       summary: Update a SIP trunk configuration
-      description: Use this method to update the configuration of a specific SIP trunk.
+      description: Use this method to update a specific SIP trunk configuration.
       operationId: UpdateaSIPtrunk
       parameters:
         - name: id
@@ -214,8 +215,8 @@ paths:
       tags:
         - Buy
       summary: Get a list of countries
-      description: Use this method to retrieve a list of countries where phone numbers
-        are available to purchase.
+      description: Use this method to retrieve a list of countries
+       where phone numbers are available to purchase.
       operationId: Getalistofcountries
       parameters:
         - name: text_enabled_only
@@ -322,8 +323,8 @@ paths:
       tags:
         - Buy
       summary: Get a list of cities in a country
-      description: Use this method to retrieve a list of cities for countries where
-        `has_provinces_or_states` is `false`.
+      description: Use this method to retrieve a list of cities
+       for countries where `has_provinces_or_states` is `false`.
       operationId: Getalistofcitiesinacountry
       parameters:
         - name: country
@@ -391,8 +392,8 @@ paths:
       tags:
         - Buy
       summary: Get a list of cities in a region
-      description: Use this method to retrieve a list of cities for countries where
-        `has_provinces_or_states` is `true`.
+      description: Use this method to retrieve a list of cities for countries
+         where `has_provinces_or_states` is `true`.
       operationId: Getalistofcitiesinaregion
       parameters:
         - name: country
@@ -566,9 +567,9 @@ paths:
       tags:
         - Cart
       summary: Add phone numbers to the cart
-      description: Use this method to add phone numbers to the cart in your account.
-        After adding numbers, you can complete the purchase by checking out the
-        cart.
+      description: Use this method to add phone numbers
+         to the cart in your account. After adding numbers,
+         you can complete the purchase by checking out the cart.
       operationId: AddDIDnumberstothecart
       parameters: []
       requestBody:
@@ -583,7 +584,8 @@ paths:
               properties:
                 ids:
                   type: array
-                  description: Comma-separated list of phone numbers to add to the cart
+                  description: Comma-separated list of numbers
+                   to add to the cart
                   items:
                     type: string
                   example:
@@ -647,14 +649,16 @@ paths:
                     example: false
                   message:
                     type: string
-                    example: At least one DID with ID specified in the request was not found
+                    example: At least one DID with ID specified in the request
+                     was not found
       deprecated: false
     get:
       tags:
         - Cart
       summary: Get cart content
-      description: Use this method to get a list of phone numbers that were previously
-        added to the cart. This method does not require any parameters.
+      description: Use this method to get a list of phone numbers
+       that were previously added to the cart.
+        This method does not require any parameters.
       operationId: Getcartcontent
       parameters: []
       responses:
@@ -729,7 +733,8 @@ paths:
       tags:
         - Cart
       summary: Remove numbers from the cart
-      description: Use this method to remove phone numbers from the cart in your account.
+      description: Use this method to remove phone numbers
+       from the cart in your account.
       operationId: Removenumbersfromthecart
       requestBody:
         required: true
@@ -775,7 +780,8 @@ paths:
                     example: false
                   message:
                     type: string
-                    example: At least one DID with ID specified in the request was not found
+                    example: At least one DID with ID specified
+                     in the request was not found
       deprecated: false
   /buy/cart/checkout:
     post:
@@ -783,11 +789,13 @@ paths:
         - Cart
       summary: Check out numbers
       description: >-
-        Use this method to check out phone numbers currently in the cart. 
+        Use this method to check out phone numbers currently in the cart.
 
 
-
-        The activation and monthly fee will be automatically deducted from your balance. Ensure you have sufficient funds on your account or a primary card linked with enough balance to complete the purchase.
+        The activation and monthly fee will be automatically
+         deducted from your balance. Ensure you have sufficient
+          funds on your account or a primary card linked with
+           enough balance to complete the purchase.
       operationId: CheckoutDIDnumbers
       parameters: []
       requestBody:
@@ -834,15 +842,16 @@ paths:
                     example: false
                   message:
                     type: string
-                    example: At least one DID with ID specified in the request was not found
+                    example: At least one DID with ID specified
+                     in the request was not found
       deprecated: false
   /mydids:
     get:
       tags:
         - My numbers
       summary: Get numbers on the account
-      description: Use this method to list phone numbers on your account. By default,
-        results are paginated with 25 records per page.
+      description: Use this method to list phone numbers on your account.
+       By default, results are paginated with 25 records per page.
       operationId: GetDIDsontheaccount
       parameters:
         - name: city_id
@@ -856,8 +865,8 @@ paths:
             example: 123
         - name: search
           in: query
-          description: Filter numbers by digits in the phone number. You can provide a
-            full number or part of it.
+          description: Filter numbers by digits in the phone number.
+           You can provide a full number or part of it.
           style: form
           explode: true
           schema:
@@ -865,7 +874,8 @@ paths:
             example: "256537"
         - name: label
           in: query
-          description: Filter phone numbers by label. Only exact matches are returned.
+          description: Filter phone numbers by label.
+           Only exact matches are returned.
           style: form
           explode: true
           schema:
@@ -873,9 +883,9 @@ paths:
             example: ALEX
         - name: label_present
           in: query
-          description: If true, returns only phone numbers with a label. If false, returns
-            only phone numbers without a label. When this parameter is used, the
-            `label` parameter is ignored.
+          description: If true, returns only phone numbers with a label.
+           If false, returns only phone numbers without a label.
+            When this parameter is used, the `label` parameter is ignored.
           style: form
           explode: true
           schema:
@@ -931,8 +941,9 @@ paths:
           explode: true
         - name: dids
           in: query
-          description: A comma-separated string of phone numbers to release from your
-            account (e.g., "47832123321,47832123324,47832123325")
+          description: A comma-separated string of phone numbers
+           to release from your account
+            (e.g., "47832123321,47832123324,47832123325")
           required: false
           schema:
             type: string
@@ -1002,7 +1013,8 @@ paths:
       tags:
         - My numbers
       summary: Update a specific number
-      description: Use this method to update a specific phone number configuration settings.
+      description: Use this method to update a specific phone number
+       configuration settings.
       operationId: UpdateaspecificDID
       parameters:
         - name: id
@@ -1036,16 +1048,22 @@ paths:
                 sms_relay_url:
                   type: string
                   description: >-
-                    SMS relay URL for the number. Incoming  and MMS messages are sent
-                    to this URL as HTTP POST requests. If the number isn't
-                    SMS-enabled, setting the `sms_relay_url` returns the `HTTP
-                    422 Unprocessable Content` error.
+                    SMS relay URL for the number.
+                     Incoming SMS and MMS messages will be sent
+                      to this URL as HTTP POST requests.
+                      If the number isn't SMS-enabled,
+                       setting the `sms_relay_url`
+                       returns the `HTTP 422 Unprocessable Content` error.
 
-                    To remove inbound message routing for this number, set the value to `null`. Messages will then be forwarded only to the `sms_relay_url` configured on the account.
+                    To remove inbound message routing for this number,
+                     set the value to `null`.
+                      Messages will then be forwarded only to
+                      the `sms_relay_url` configured on the account.
                   example: https://you-site.com/sms
                 call_status_url:
                   type: string
-                  description: Call status callback URL for the number. Status updates are sent to
+                  description: Call status callback URL for the number.
+                   Status updates are sent to
                     this URL as HTTP POST requests.
                   example: https://your-site.com/calls
         required: false
@@ -1088,7 +1106,8 @@ paths:
               properties:
                 sms_enabled:
                   type: boolean
-                  description: Turn inbound SMS support on or off for the number.
+                  description: Turn inbound SMS support on or off
+                   for the number.
                   example: true
                 id:
                   type: integer
@@ -1117,7 +1136,8 @@ paths:
         "404":
           $ref: "#/components/responses/NotFoundError"
         "422":
-          description: Inbound SMS can only be activated on US and CA phone numbers
+          description: Inbound SMS can only be activated on
+           US and CA phone numbers
           content:
             application/json:
               schema:
@@ -1128,7 +1148,8 @@ paths:
                     example: false
                   message:
                     type: string
-                    example: Inbound SMS can only be activated on US and CA phone numbers
+                    example: Inbound SMS can only be activated
+                     on US and CA phone numbers
       deprecated: false
   /mydids/update-destinations:
     post:
@@ -1142,7 +1163,8 @@ paths:
         destinations for a phone number.
 
 
-        Destinations for several phone numbers can be updated with a single request.
+        Destinations for several phone numbers can be updated
+         with a single request.
       operationId: UpdateDIDdestinations
       parameters: []
       requestBody:
@@ -1172,7 +1194,8 @@ paths:
         "403":
           $ref: "#/components/responses/ForbiddenError"
         "404":
-          description: Request failed. An object with the specified ID is not found.
+          description: Request failed. An object with the specified
+           ID is not found.
           headers: {}
           content:
             application/json:
@@ -1181,7 +1204,8 @@ paths:
                   - $ref: "#/components/schemas/NotFoundException"
               example:
                 success: false
-                message: Request failed. An object with the specified ID is not found.
+                message: Request failed. An object with the specified
+                 ID is not found.
       deprecated: false
   /mydids/papers:
     post:
@@ -1211,7 +1235,8 @@ paths:
               properties:
                 did_ids:
                   type: string
-                  description: A comma-separated list of phone number IDs the document applies to.
+                  description: A comma-separated list of phone number IDs
+                   the document applies to.
                   example: "2321"
                 doc_attachment:
                   type: string
@@ -1222,7 +1247,8 @@ paths:
         required: false
       responses:
         "200":
-          description: Document uploaded successfully. The response includes a list of
+          description: Document uploaded successfully.
+           The response includes a list of
             documents uploaded for the specified phone numbers.
           content:
             application/json:
@@ -1234,7 +1260,8 @@ paths:
                   properties:
                     allow_replace:
                       type: boolean
-                      description: Indicates whether the document can be replaced.
+                      description: Indicates whether the document
+                       can be replaced.
                       example: false
                     did_number:
                       type: string
@@ -1289,15 +1316,18 @@ paths:
       tags:
         - CDRs
       summary: Get CDRs on the account
-      description: Use this method to retrieve a list of CDRs for inbound and outbound
-        calls. The records can be filtered by date, phone number, destination or
-        call type. By default, the results are paginated, with 25 records per
+      description: Use this method to retrieve a list of CDRs
+       for inbound and outbound calls.
+        The records can be filtered by date, phone number,
+         destination or call type.
+          By default, the results are paginated, with 25 records per
         page.
       operationId: GetCDRsontheaccount
       parameters:
         - name: from
           in: query
-          description: Start date of your search time range, in `yyyy-mm-dd` format
+          description: Start date of your search time range, in `yyyy-mm-dd`
+           format
           required: true
           style: form
           explode: true
@@ -1307,7 +1337,8 @@ paths:
             example: 2023-01-01
         - name: to
           in: query
-          description: End date of your search time range, in `yyyy-mm-dd` format.
+          description: End date of your search time range, in `yyyy-mm-dd`
+           format.
           required: true
           style: form
           explode: true
@@ -1317,8 +1348,8 @@ paths:
             example: 2023-09-01
         - name: type
           in: query
-          description: Use `placed` to get CDRs for outbound calls or `received` for
-            inbound calls.
+          description: Use `placed` to get CDRs for outbound calls or `received`
+           for inbound calls.
           required: true
           style: form
           explode: true
@@ -1335,13 +1366,14 @@ paths:
           schema:
             allOf:
               - $ref: "#/components/schemas/Calldisposition"
-              - description: Filter calls by disposition. In case the parameter is not
-                  specified, only answered calls are returned. To get all calls
-                  regardless their disposition pass `all` as the parameter value
+              - description: Filter calls by disposition. In case the parameter
+                 is not specified, only answered calls are returned.
+                  To get all calls regardless their disposition
+                   pass `all` as the parameter value
         - name: from_search
           in: query
-          description: Filter results by the originating phone number. The parameter can
-            be either full phone number or a part of it.
+          description: Filter results by the originating phone number.
+           The parameter can be either full phone number or a part of it.
           style: form
           explode: true
           schema:
@@ -1349,8 +1381,8 @@ paths:
             example: "13524815863"
         - name: to_search
           in: query
-          description: Filter results by destination phone number. The parameter can be
-            either full phone number or a part of it.
+          description: Filter results by destination phone number.
+           The parameter can be either full phone number or a part of it.
           style: form
           explode: true
           schema:
@@ -1358,8 +1390,9 @@ paths:
             example: "12565378257"
         - name: sip_trunk
           in: query
-          description: Filter results by the unique SIP trunk login used to place an
-            outbound call. For inbound calls, this parameter is ignored.
+          description: Filter results by the unique SIP trunk login used
+           to place an outbound call. For inbound calls,
+            this parameter is ignored.
           style: form
           explode: true
           schema:
@@ -1459,7 +1492,8 @@ paths:
 
         - uuid - the unique identifier of the recorded call
 
-        - status - status of the operation. Can be either `completed` indicating the recorded call was successfully transcribed or `failed` which indicates that there was an error while transcribing the call.
+        - status - status of the operation. Can be either `completed`
+         indicating the recorded call was successfully transcribed or `failed` which indicates that there was an error while transcribing the call.
       operationId: Transcribeasinglecall
       parameters:
         - name: cdr_uuid
@@ -2711,14 +2745,16 @@ paths:
         - Call control
       summary: Start call streaming
       description: >-
-        Use this method to start call streaming. Wavix Call Media Streaming
-        allows you to stream inbound (to Wavix), outbound (from Wavix), or both
-        channels. Wavix also supports unidirectional streaming when your
-        WebSocket only receives media from the platform, and bi-directional
+        Use this method to start call streaming.
+         Wavix Call Media Streaming allows you to stream inbound (to Wavix),
+          outbound (from Wavix), or both channels.
+           Wavix also supports unidirectional streaming when your WebSocket
+            only receives media from the platform, and bi-directional
         streaming when your WebSocket can send back audio and commands to Wavix.
 
 
-        **Note**. You can have up to 5 unidirectional streams for a call. Only one bi-directional stream can be created.
+        **Note**. You can have up to 5 unidirectional streams for a call.
+         Only one bi-directional stream can be created.
       operationId: StartCallStreaming
       parameters:
         - name: uuid
@@ -3765,7 +3801,7 @@ paths:
       description: >-
         Use this method to retrieve outbound and inbound SMS or MMS.
         Messages can be filtered by date, originating (Sender ID), destination
-        phone numbers, or message `tag`. 
+        phone numbers, or message `tag`.
 
 
         By default, the results are paginated with 25 records per page.
@@ -4627,15 +4663,15 @@ paths:
         - 10DLC
       summary: Appeal a 10DLC Brand Identity verification
       description: >-
-        Use this method to appeal a 10DLC Brand Identity verification. 
+        Use this method to appeal a 10DLC Brand Identity verification.
 
 
-        You may need to provide any additional documentation you have for the Brand. 
+        You may need to provide any additional documentation you have for the Brand.
 
 
         The following appeal categories are allowed:
-         - **VERIFY_TAX_ID** - Use this category if the Brand is UNVERIFIED due to an inability to match the tax ID. Private companies, public companies, non-profit organizations, and Government Brands may submit this appeal category. 
-        - **VERIFY_NON_PROFIT** - Use this category if the Brand was submitted as a Non-Profit Organization is UNVERIFIED or VERIFIED and is missing a “Tax Exempt Status”. 
+         - **VERIFY_TAX_ID** - Use this category if the Brand is UNVERIFIED due to an inability to match the tax ID. Private companies, public companies, non-profit organizations, and Government Brands may submit this appeal category.
+        - **VERIFY_NON_PROFIT** - Use this category if the Brand was submitted as a Non-Profit Organization is UNVERIFIED or VERIFIED and is missing a “Tax Exempt Status”.
          - **VERIFY_GOVERNMENT** - Select this category if the record submitted as a Government entity type is UNVERIFIED or VERIFIED and is missing a “Government Entity” status.
       operationId: Appeala10DLCBrandIdentityverification
       parameters:
@@ -5059,12 +5095,13 @@ paths:
         Use this method to request external vetting for a 10DLC Brand.
 
         The following external vetting providers' codes are supported:
-         - **AEGIS** - The Aegis Mobile, the default external vetting provider. 
-        - **CV** - The Campaign Verify. 
+         - **AEGIS** - The Aegis Mobile, the default external vetting provider.
+        - **CV** - The Campaign Verify.
          - **WMC** - WMC Global.
 
+
         Wavix supports the following vetting classes:
-         - **STANDARD** 
+         - **STANDARD**
         - **STANDARD**
          - **ENHANCED**
       operationId: Requestexternalvettingfora10DLCBrand
@@ -5387,7 +5424,7 @@ paths:
         - 10DLC
       summary: Qualify a 10DLC Brand for a use case
       description: >-
-        Use this method to qualify a 10DLC Brand for a use case. 
+        Use this method to qualify a 10DLC Brand for a use case.
 
 
         If the Brand is qualified to run a Campaign across one or more MNOs, the API will return a list of MNO-specific attributes (e.g., AT&T message class), restrictions, and pre/post-approval validation requirements. Additionally, the response will provide the monthly fee associated with the use case.
@@ -5526,8 +5563,7 @@ paths:
         - 10DLC
       summary: List all 10DLC Campaigns on your account
       description: |-
-        Use this method to query all 10DLC Campaigns on your account. 
-
+        Use this method to query all 10DLC Campaigns on your account.
         The results are paginated with 25 records per page by default.
       operationId: Listall10DLCCampaignsonyouraccount
       parameters:
@@ -5725,7 +5761,7 @@ paths:
         - 10DLC
       summary: List all 10DLC Campaigns associated with a Brand
       description: |-
-        Use this method to query all 10DLC Campaigns associated with a Brand. 
+        Use this method to query all 10DLC Campaigns associated with a Brand.
 
         The results are paginated with 25 records per page by default.
       operationId: Listall10DLCCampaignsassociatedwithaBrand
@@ -6358,7 +6394,7 @@ paths:
         - 10DLC
       summary: Delete a 10DLC Campaign
       description: >-
-        Use this method to delete a 10DLC Campaign. 
+        Use this method to delete a 10DLC Campaign.
 
 
         **Note** You will not be able to use any phone number associated with the Campaign as a Sender IDs once it is deleted.
@@ -6535,7 +6571,7 @@ paths:
         - 10DLC
       summary: Link a number to a 10DLC Campaign
       description: >-
-        Use this method to link a phone number to a 10DLC Campaign. 
+        Use this method to link a phone number to a 10DLC Campaign.
 
 
         Wavix will automatically create a Sender ID associated with the number, once it is successfully approved. The Sender ID will be allowed-listed for the U.S.
@@ -6609,10 +6645,11 @@ paths:
         - 10DLC
       summary: Delete a number from a 10DLC Campaign
       description: >-
-        Use this method to remove a number from a Campaign. 
+        Use this method to remove a number from a Campaign.
 
 
-        After the phone number is deleted from the Campaign, the Sender ID associated with the number will also be automatically deleted.
+        After the phone number is deleted from the Campaign,
+         the Sender ID associated with the number will also be automatically deleted.
       operationId: Deleteanumberfroma10DLCCampaign
       parameters:
         - name: brand_id
@@ -7323,7 +7360,7 @@ paths:
         Before sending and validating a one-time password (OTP), you must
         create a 2FA Service using the Wavix portal. The service must be created
         only once, you can use it to generate and validate as many OTPs as
-        needed. 
+        needed.
 
 
         In order to send and verify an OTP, you must:
@@ -7465,13 +7502,13 @@ paths:
                       type: string
                       description: Status of the 2FA Verification
                       example: verified
-                    charge: 
+                    charge:
                       type: string
                       description: Charge for the 2FA Verification
                       example: "0.01"
                     service_id:
                       type: string
-                      description: Unique identifier of the Wavix 2FA Service 
+                      description: Unique identifier of the Wavix 2FA Service
                       example: 7204a030201211ee9fb47d093f2f127c
                     service_name:
                       type: string
@@ -7605,7 +7642,7 @@ paths:
       summary: Validate a code
       description: >-
         To validate an OTP, an end user must enter the received code into
-        your service or application and submit it for validation. 
+        your service or application and submit it for validation.
 
 
         Once the code is submitted, use this method to check whether the code is valid. Pass the entered code and the 2FA Verification ID to verify whether the entered code matches the latest one sent to the end user's phone number within the specified 2FA Verification.
@@ -10864,8 +10901,7 @@ components:
         event:
           type: string
           description: "Human readable event description. Can contain on of the following
-            values: 
-            
+            values:
             - `Number lookup` for the Wavix platform checked if the
             destination phone number is valid. You'll see the event only when
             the Number validation option is activated for your 2FA Service;
@@ -11067,15 +11103,15 @@ components:
           example: "0.18"
         call_restrict:
           type: boolean
-          description: Indicates if maximum call duration limit is activated for the SIP
-            trunk.
+          description: Indicates if maximum call duration limit is activated
+           for the SIP trunk.
           default: false
           nullable: true
           example: false
         call_limit:
           type: integer
-          description: A maximum call duration for the SIP trunk, in seconds. Cannot be
-            higher than the max call duration set for the account.
+          description: A maximum call duration for the SIP trunk, in seconds.
+           Cannot be higher than the max call duration set for the account.
           format: int32
           nullable: true
           example: 3600
