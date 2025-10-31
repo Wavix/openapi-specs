@@ -7452,7 +7452,8 @@ paths:
             example: 7204a030201211ee9fb47d093f2f127c
         - name: from
           in: query
-          description: Start date of your search time range, in `yyyy-mm-dd` format
+          description: Start date of your search time range,
+           in `yyyy-mm-dd` format
           required: true
           style: form
           explode: true
@@ -7462,7 +7463,8 @@ paths:
             example: 2022-01-01
         - name: to
           in: query
-          description: End date of your search time range, in `yyyy-mm-dd` format
+          description: End date of your search time range,
+           in `yyyy-mm-dd` format
           required: true
           style: form
           explode: true
@@ -7479,12 +7481,13 @@ paths:
               schema:
                 type: array
                 items:
-                  type: datetime
+                  type: object
                   properties:
                     created_at:
                       type: string
                       format: date-time
-                      description: Timestamp when the 2FA Verification was created
+                      description: Timestamp when the 2FA Verification
+                       was created
                       example: 2022-02-16T13:41:38.000Z
                     session_id:
                       type: string
@@ -7492,7 +7495,8 @@ paths:
                       example: 2953d4308f2e11ecb75fcdafd6d2d687
                     phone_number:
                       type: string
-                      description: Destination phone number for the 2FA Verification
+                      description: Destination phone number for the
+                       2FA Verification
                       example: "447919433768"
                     destination_country:
                       type: string
